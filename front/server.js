@@ -1,10 +1,19 @@
-const express = require('express')
-const app = express()
-const port = process.env.PORT || 5000
-const dbConnection = require('./db')
+const express = require('express');
+const app = express();
+const dbConnection = require('./db.js'); // Importer la connexion à la base de données
+const carRoutes = require('./routes/carsRoutes.js'); // Importer les routes des voitures
 
+app.use(express.json());
 
+app.get('/', (req, res) => {
+    res.send('Hello world');
+});
 
-app.use('api.cars/' , require ('./routes/carsRoutes'))
-app.get('/', (req, res) => { res.send('Hello World!')})
-app.listen(port, () => console.log(`Node Server started at ${port}!`))
+// Utiliser les routes de voitures
+app.use('/api/cars', carRoutes);
+
+const port = 5000;
+
+app.listen(port, () => {
+    console.log(`Server is running on http://localhost:${port}`);
+});
