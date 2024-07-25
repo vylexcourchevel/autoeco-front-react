@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { FETCH_SUCCESS, FETCH_FAILURE } from '../redux/reducers/sliceCar';  // Corrigez ce chemin
 import axios from 'axios';
 
+
 const Home = () => {
   const dispatch = useDispatch();
    
@@ -14,8 +15,10 @@ const Home = () => {
   useEffect(() => {
     const fetchCar = async () => {
      
+     
       try {
-        const { data } = await axios.get("http://localhost:8001/api/cars/all");
+        const { data } = await axios.get("http://localhost:8000/api/cars/all");
+       
        
         dispatch(FETCH_SUCCESS(data));
       } catch (error) {
