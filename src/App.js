@@ -6,6 +6,8 @@ import Register from './pages/Register';
 import BookingCar from './pages/BookingCar';
 import  AdminPage from './pages/AdminPage';
 import AdminCarPage from './pages/AdminCarPage';
+import Errorpage from './pages/Errorpage';
+
 
 function App() {
   return (
@@ -16,9 +18,9 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/bookingCar" element={<BookingCar />} />
-          <Route path="*" element={<Home />} />
           <Route path="/admin" element={<AdminPage />} />
           <Route path="/admincar" element={<AdminCarPage />} />
+          <Route path="*" element={<Errorpage/>} />
         </Routes>
       </BrowserRouter>
     </div>

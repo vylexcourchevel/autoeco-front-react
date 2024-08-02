@@ -7,32 +7,34 @@ import { FETCH_SUCCESS, FETCH_FAILURE } from '../redux/reducers/sliceCar'; // Im
 const AdminCarPage = () => {
   const dispatch = useDispatch(); // Obtention de la fonction dispatch pour envoyer des actions au store Redux
   const cars = useSelector((state) => state.car.data); // Accès à la liste des voitures depuis le store Redux
-  // const loading = useSelector((state) => state.car.loading); // Accès à l'état de chargement depuis le store Redux
-  // const error = useSelector((state) => state.car.error); // Accès à l'état d'erreur depuis le store Redux
+  const loading = useSelector((state) => state.car.loading); // Accès à l'état de chargement depuis le store Redux
+  const error = useSelector((state) => state.car.error); // Accès à l'état d'erreur depuis le store Redux
 
+  const fetchCars = async () => {
+    dispatch({ type: 'FETCH_CARS_LOADING' }); // Peut être utilisé pour mettre à jour l'état de chargement si nécessaire
+    try {
+      const { data } = await axios.get('http://localhost:8002/api/cars/all'); // Requête pour récupérer les voitures depuis l'API
+      console.log('Fetched car data:', data); // Ajoutez ce log pour vérifier les données sélectionnées
+      dispatch(FETCH_SUCCESS(data)); // Dispatch de l'action FETCH_SUCCESS avec les données récupérées
+    } catch (error) {
+      dispatch(FETCH_FAILURE(error.message)); // Dispatch de l'action FETCH_FAILURE en cas d'erreur
+    }
+  };
   useEffect(() => {
-    const fetchCars = async () => {
-      //dispatch({ type: 'FETCH_CARS_LOADING' }); // Peut être utilisé pour mettre à jour l'état de chargement si nécessaire
-      try {
-        const { data } = await axios.get('http://localhost:8002/api/cars/all'); // Requête pour récupérer les voitures depuis l'API
-         console.log('Fetched car data:', data); // Ajoutez ce log pour vérifier les données récupérées
-        dispatch(FETCH_SUCCESS(data)); // Dispatch de l'action FETCH_SUCCESS avec les données récupérées
-      } catch (error) {
-        dispatch(FETCH_FAILURE(error.message)); // Dispatch de l'action FETCH_FAILURE en cas d'erreur
-      }
-    };
 
     fetchCars(); // Appel de la fonction pour récupérer les données lors du montage du composant
   }, [dispatch]); // Dépendance sur dispatch pour que l'effet se déclenche uniquement lors du premier rendu
 
-  // const handleDelete = async (carId) => {
-  //   try {
-  //     await axios.delete(`http://localhost:8002/api/cars/${carId}`); // Requête pour supprimer la voiture avec l'ID spécifié
-  //     dispatch(DELETE_CAR(carId)); // Dispatch de l'action DELETE_CAR pour mettre à jour l'état dans Redux
-  //   } catch (error) {
-  //     console.error('Error deleting car:', error); // Gestion des erreurs en cas d'échec de la requête
-  //   }
-  // };
+  const handleDelete = async (carId) => {
+    console.log(carId);
+    try {
+      await axios.delete(`http://localhost:8002/api/cars/delete/${carId}`); // Requête pour supprimer la voiture avec l'ID spécifié
+      // dispatch(DELETE_CAR(carId)); // Dispatch de l'action DELETE_CAR pour mettre à jour l'état dans Redux
+      await fetchCars();
+    } catch (error) {
+      console.error('Error deleting car:', error); // Gestion des erreurs en cas d'échec de la requête
+    }
+  };
 
   // const handleUpdate = async (carId, updatedCar) => {
   //   try {
@@ -43,8 +45,8 @@ const AdminCarPage = () => {
   //   }
   // };
 
-  // if (loading === 'loading') return <div>Loading...</div>; // Affichage d'un message de chargement pendant que les données sont en cours de récupération
-  // if (error) return <div>Error: {error}</div>; // Affichage d'un message d'erreur si une erreur s'est produite
+  if (loading === 'loading') return <div>Loading...</div>; // Affichage d'un message de chargement pendant que les données sont en cours de récupération
+  if (error) return <div>Error: {error}</div>; // Affichage d'un message d'erreur si une erreur s'est produite
 
   return (
     <div className="container"> {/* Conteneur principal de la page */}
@@ -52,9 +54,10 @@ const AdminCarPage = () => {
         {cars.map((car) => ( // Boucle à travers chaque voiture dans la liste
           <div key={car.id} className="col-md-4 mb-4"> {/* Conteneur pour chaque voiture avec une clé unique */}
             <div className="card" style={{ width: '18rem' }}> {/* Carte pour afficher les détails de la voiture */}
-              {car.images && car.images.length > 0 ? (
+              {car.CarImages && car.CarImages.length > 0 ? (
                 <img
-                  src={`http://localhost:8002${car.images[0].imageURL}`} // URL de l'image de la voiture
+                  src={`http://localhost:8002${car.CarImages[0].imageURL}`} // URL de l'image de la voiture
+              
                   className="card-img-top"
                   alt={`${car.brand} ${car.model}`} // Texte alternatif pour l'image
                   style={{ width: '100%', height: 'auto' }}
@@ -73,7 +76,10 @@ const AdminCarPage = () => {
                 <p className="card-text">Year: {car.years}</p> {/* Année de fabrication */}
                 <p className="card-text">Price per Day: {car.pricePerDay}</p> {/* Prix par jour */}
                 <p className="card-text">Available: {car.available ? 'Yes' : 'No'}</p> {/* Disponibilité */}
-            
+                <button  className="btn btn-danger" onClick={() => handleDelete(car.id)}> {/* Bouton pour supprimer la voiture */}
+                Delete
+              </button>
+              
               </div>
             </div>
           </div>
@@ -84,3 +90,13 @@ const AdminCarPage = () => {
 };
 
 export default AdminCarPage; // Exportation du composant pour utilisation dans d'autres parties de l'application
+// {/* <button 
+// className="btn btn-warning"
+// onClick={() => handleUpdate(car.id, { ...car, available: !car.available })}> {/* Bouton pour modifier la disponibilité */}
+// Toggle Availability
+// </button>
+// <button 
+// className="btn btn-danger"
+// onClick={() => handleDelete(car.id)}> {/* Bouton pour supprimer la voiture */}
+// Delete
+// </button> */}
