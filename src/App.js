@@ -5,6 +5,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import BookingCar from './pages/BookingCar';
 import  AdminPage from './pages/AdminPage';
+import AdminCarPage from './pages/AdminCarPage';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route path="/bookingCar" element={<BookingCar />} />
           <Route path="*" element={<Home />} />
           <Route path="/admin" element={<AdminPage />} />
+          <Route path="/admincar" element={<AdminCarPage />} />
         </Routes>
       </BrowserRouter>
     </div>
