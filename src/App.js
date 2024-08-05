@@ -8,23 +8,25 @@ import  AdminPage from './pages/AdminPage';
 import AdminCarPage from './pages/AdminCarPage';
 import Errorpage from './pages/Errorpage';
 import ReservationForm from './pages/ReservationForm';  
-
+import DefaultLayout from './components/DefaultLayout';
 
 
 function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/bookingCar" element={<BookingCar />} />
-          <Route path="/admin" element={<AdminPage />} />
-          <Route path="/admincar" element={<AdminCarPage />} />
-          <Route path="/reservation" element={<ReservationForm />} />
-          <Route path="*" element={<Errorpage/>} />
-        </Routes>
+        <DefaultLayout>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/bookingCar" element={<BookingCar />} />
+            <Route path="/admin" element={<AdminPage />} />
+            <Route path="/admincar" element={<AdminCarPage />} />
+            <Route path="/reservation" element={<ReservationForm />} />
+            <Route path="*" element={<Errorpage/>} />
+          </Routes>
+        </DefaultLayout>
       </BrowserRouter>
     </div>
   );
