@@ -59,154 +59,136 @@ const Adminpage = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h1>Ajouter un véhicule</h1>
-      <div className="form-row">
-        <div className="form-group col-md-6">
-          <label htmlFor="brand">Marque du véhicule</label>
-          <input
-            type="text"
-            className="form-control"
-            id="brand"
-            placeholder="Marque du véhicule"
-            value={formValues.brand}
-            onChange={handleInputChange}
-          />
+    <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '100vh' }}>
+      <form onSubmit={handleSubmit} style={{
+           display: 'flex',
+           flexDirection: 'column',
+           alignItems: 'center',
+           width: '100%',
+           maxWidth: '800px', 
+           padding: '20px',
+           borderRadius: '8px', 
+           boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)' }}>
+
+        <h1 className="text-center">Ajouter un véhicule</h1>
+        <div className="form-row" style ={{ 
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          width: '100%',
+          maxWidth: '800px', 
+          padding: '20px',
+          borderRadius: '8px', 
+          boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
+           }}>
+
+          <div className="form-group col-md-6">
+            <label htmlFor="brand">Marque du véhicule</label>
+            <input
+              type="text"
+              className="form-control"
+              id="brand"
+              placeholder="Marque du véhicule"
+              value={formValues.brand}
+              onChange={handleInputChange}
+            />
+          </div>
+          <div className="form-group col-md-6">
+            <label htmlFor="model">Modèle</label>
+            <input
+              type="text"
+              className="form-control"
+              id="model"
+              placeholder="Modèle"
+              value={formValues.model}
+              onChange={handleInputChange}
+            />
+          </div>
+          <div className="form-group col-md-6">
+            <label htmlFor="immatriculation">Immatriculation</label>
+            <input
+              type="text"
+              className="form-control"
+              id="immatriculation"
+              placeholder="Immatriculation"
+              value={formValues.immatriculation}
+              onChange={handleInputChange}
+            />
+          </div>
+          <div className="form-group col-md-6">
+            <label htmlFor="years">Année de mise en circulation</label>
+            <input
+              type="number"
+              className="form-control"
+              id="years"
+              placeholder="Année"
+              value={formValues.years}
+              onChange={handleInputChange}
+            />
+          </div>
+          <div className="form-group col-md-6">
+            <label htmlFor="price">Prix de la location</label>
+            <input
+              type="number"
+              className="form-control"
+              id="price"
+              placeholder="Prix"
+              value={formValues.price}
+              onChange={handleInputChange}
+            />
+          </div>
+          <div className="form-group col-md-6">
+            <label htmlFor="available">Disponibilité</label>
+            <input
+              type="text"
+              className="form-control"
+              id="available"
+              placeholder="Disponibilité"
+              value={formValues.available}
+              onChange={handleInputChange}
+            />
+          </div>
+          
+          <div className="form-group col-md-6">
+            <label htmlFor="fileUpload">Télécharger une image</label>
+            <div className="input-group mb-3">
+              <input
+                type="file"
+                className="form-control"
+                id="fileUpload"
+                aria-label="Upload"
+                onChange={handleFileChange}
+              />
+              <div className="input-group-append">
+                <button className="btn btn-outline-secondary" type="button" id="button-addon1">Télécharger l'image</button>
+              </div>
+            </div>
+          </div>
+          
+          <div className="form-group col-md-6">
+            <button 
+              type="submit" 
+              className="btn btn-primary btn-lg"
+              style={{
+                backgroundColor: '#007bff',
+                color: '#fff',
+                border: 'none',
+                borderRadius: '5px',
+                padding: '10px 20px',
+                fontSize: '16px',
+                cursor: 'pointer',
+                transition: 'background-color 0.3s',
+              }}
+              onMouseOver={(e) => e.target.style.backgroundColor = '#0056b3'}
+              onMouseOut={(e) => e.target.style.backgroundColor = '#007bff'}
+            >
+              Ajouter le véhicule
+            </button>
+          </div>
         </div>
-        <div className="form-group col-md-6">
-          <label htmlFor="model">Modèle</label>
-          <input
-            type="text"
-            className="form-control"
-            id="model"
-            placeholder="Modèle"
-            value={formValues.model}
-            onChange={handleInputChange}
-          />
-        </div>
-        <div className="form-group col-md-6">
-          <label htmlFor="immatriculation">Immatriculation</label>
-          <input
-            type="text"
-            className="form-control"
-            id="immatriculation"
-            placeholder="Immatriculation"
-            value={formValues.immatriculation}
-            onChange={handleInputChange}
-          />
-        </div>
-        <div className="form-group col-md-6">
-          <label htmlFor="years">Année de mise en circulation</label>
-          <input
-            type="number"
-            className="form-control"
-            id="years"
-            placeholder="Année"
-            value={formValues.years}
-            onChange={handleInputChange}
-          />
-        </div>
-        <div className="form-group col-md-6">
-          <label htmlFor="price">Prix de la location</label>
-          <input
-            type="number"
-            className="form-control"
-            id="price"
-            placeholder="Prix"
-            value={formValues.price}
-            onChange={handleInputChange}
-          />
-        </div>
-        <div className="form-group col-md-6">
-          <label htmlFor="available">Disponibilité</label>
-          <input
-            type="text"
-            className="form-control"
-            id="available"
-            placeholder="Disponibilité"
-            value={formValues.available}
-            onChange={handleInputChange}
-          />
-        </div>
-        
-        <div className="input-group mb-3">
-          <input
-            type="file"
-            className="form-control"
-            id="fileUpload"
-            aria-label="Upload"
-            onChange={handleFileChange}
-          />
-          <button className="btn btn-outline-secondary" type="button" id="button-addon1">Télécharger l'image</button>
-        </div>
-        
-        <div className="form-group">
-          <button 
-            type="submit" 
-            className="btn btn-primary btn-lg" // Classes Bootstrap pour le style du bouton
-            style={{
-              backgroundColor: '#007bff', // Couleur de fond personnalisée
-              color: '#fff', // Couleur du texte
-              border: 'none', // Suppression de la bordure
-              borderRadius: '5px', // Bordures arrondies
-              padding: '10px 20px', // Espacement interne
-              fontSize: '16px', // Taille de la police
-              cursor: 'pointer', // Curseur en forme de main au survol
-              transition: 'background-color 0.3s', // Transition de couleur de fond au survol
-            }}
-            onMouseOver={(e) => e.target.style.backgroundColor = '#0056b3'} // Changer la couleur de fond au survol
-            onMouseOut={(e) => e.target.style.backgroundColor = '#007bff'} // Revenir à la couleur initiale
-          >
-            Ajouter le véhicule
-          </button>
-        </div>
-      </div>
-    </form>
+      </form>
+    </div>
   );
 };
 
 export default Adminpage;
-
-
-// import React from 'react';
-
-// const Adminpage = () => {
-//   return (
-//     <form>
-//       <h1>Ajouter un véhicule</h1>
-//       <div className="form-row">
-//         <div className="form-group col-md-6">
-//           <label htmlFor="brand">Marque du véhicule</label>
-//           <input type="text" className="form-control" id="brand" placeholder="Marque du véhicule" />
-//         </div>
-//         <div className="form-group col-md-6">
-//           <label htmlFor="model">Modèle</label>
-//           <input type="text" className="form-control" id="model" placeholder="Modèle" />
-//         </div>
-//         <div className="form-group col-md-6">
-//           <label htmlFor="registrationPlate">Immatriculation</label>
-//           <input type="text" className="form-control" id="immatriculation" placeholder="immatriculation" />
-//         </div>
-//         <div className="form-group col-md-6">
-//           <label htmlFor="years">Année de mise en circulation</label>
-//           <input type="number" className="form-control" id="years" placeholder="years" />
-//         </div>
-//         <div className="form-group col-md-6">
-//           <label htmlFor="pricePerDay">Prix de la location</label>
-//           <input type="number" className="form-control" id="price" placeholder="price" />
-//         </div>
-//         <div className="form-group col-md-6">
-//           <label htmlFor="available">Disponibilité</label>
-//           <input type="text" className="form-control" id="available" placeholder="available" />
-//         </div>
-        
-//         <div className="input-group mb-6">
-//           <input type="file" className="form-control" id="fileUpload" aria-label="Upload" />
-//           <button className="btn btn-outline-secondary" type="button" id="button-addon1">Telecharger l' Image</button>
-//         </div>
-//       </div>
-//     </form>
-//   );
-// };
-
-// export default Adminpage;

@@ -90,13 +90,3 @@ const AdminCarPage = () => {
 };
 
 export default AdminCarPage; // Exportation du composant pour utilisation dans d'autres parties de l'application
-// {/* <button 
-// className="btn btn-warning"
-// onClick={() => handleUpdate(car.id, { ...car, available: !car.available })}> {/* Bouton pour modifier la disponibilité */}
-// Toggle Availability
-// </button>
-// <button 
-// className="btn btn-danger"
-// onClick={() => handleDelete(car.id)}> {/* Bouton pour supprimer la voiture */}
-// Delete
-// </button> */}

@@ -1,10 +1,9 @@
-import React, { useState } from 'react'; // Importation de React et du hook useState
-import { Container, Row, Col, Form, Button } from 'react-bootstrap'; // Importation des composants de React Bootstrap
-import { useNavigate } from 'react-router-dom'; // Importation du hook useNavigate pour la navigation
-import axios from 'axios'; // Importation d'axios pour les requêtes HTTP
+import React, { useState } from 'react';
+import { Container, Row, Col, Form, Button } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const Register = () => {
-    // Initialisation de l'état formData pour stocker les valeurs du formulaire
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
@@ -14,45 +13,45 @@ const Register = () => {
         phoneNumber: ''
     });
 
-    // Initialisation de useNavigate pour la navigation
     const navigate = useNavigate();
 
-    // Gestion des modifications des champs du formulaire
     const handleChange = (e) => {
-        const { name, value } = e.target; // Extraction du nom et de la valeur du champ modifié
+        const { name, value } = e.target;
         setFormData({
-            ...formData, // Copie de l'état actuel
-            [name]: value // Mise à jour de la valeur du champ modifié
+            ...formData,
+            [name]: value
         });
     };
 
-    // Gestion de la soumission du formulaire
     const handleSubmit = async (e) => {
-        e.preventDefault(); // Empêche le comportement par défaut du formulaire
+        e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:8002/api/users/register', formData); // Envoi des données au backend
-            console.log('User registered successfully:', response.data); // Affiche la réponse en cas de succès
-            navigate('/'); // Redirection vers la page 'home' après une soumission réussie
+            const response = await axios.post('http://localhost:8002/api/users/register', formData);
+            console.log('User registered successfully:', response.data);
+            navigate('/');
         } catch (error) {
-            console.error('There was an error registering the user!', error); // Affiche une erreur en cas d'échec
+            console.error('There was an error registering the user!', error);
         }
     };
 
     return (
-        <Container>
-            <Row>
-                <Col md={6}>
+        <Container 
+            className="d-flex justify-content-center align-items-center"
+            style={{ minHeight: '100vh' }}
+        >
+            <Row className="w-100">
+                <Col md={6} className="mx-auto p-4" style={{ border: '1px solid #ccc', borderRadius: '8px' }}>
                     <h3>Vos coordonnées</h3>
-                    <Form onSubmit={handleSubmit}> {/* Déclenche handleSubmit lors de la soumission */}
+                    <Form onSubmit={handleSubmit}>
                         <Form.Group controlId="formLastName">
                             <Form.Label>Nom</Form.Label>
                             <Form.Control 
                                 type="text" 
                                 placeholder="Entrez votre nom" 
-                                name="lastName" // Nom du champ pour identifier l'état
-                                value={formData.lastName} // Valeur actuelle de lastName dans l'état
-                                onChange={handleChange} // Déclenche handleChange lors d'une modification
-                                required // Rend ce champ obligatoire
+                                name="lastName" 
+                                value={formData.lastName} 
+                                onChange={handleChange} 
+                                required 
                             />
                         </Form.Group>
 
@@ -115,17 +114,14 @@ const Register = () => {
                             />
                         </Form.Group>
 
-                        <Button variant="primary" type="submit"> {/* Bouton de soumission */}
+                        <Button variant="primary" type="submit">
                             Enregistrer
                         </Button>
                     </Form>
-                </Col>
-                <Col md={6}>
-                    {/* Cet espace peut être utilisé pour autre chose ou laissé vide */}
                 </Col>
             </Row>
         </Container>
     );
 };
 
-export default Register; // Exportation du composant Register
+export default Register;
