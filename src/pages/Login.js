@@ -1,7 +1,10 @@
+// src/components/Login.js
 import React, { useState } from 'react';
 import { Container, Row, Col, Form, Button, Alert } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import axios from 'axios';
+import { loginSuccess, loginFailure } from '../redux/reducers/sliceAuth';
 
 const Login = () => {
     const [formData, setFormData] = useState({
@@ -11,6 +14,7 @@ const Login = () => {
 
     const [error, setError] = useState('');
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -23,15 +27,31 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:8002/api/users/login', formData, {
-                withCredentials: true // Inclure les cookies dans la requête
-            });
-            console.log(response)
-            if (response.status === 200) {
-                navigate('/'); // Rediriger vers la page Home après connexion réussie
+            const response = await axios.post('http://localhost:8002/api/users/login', formData);
+
+            // Assurez-vous que la réponse contient les données nécessaires
+            if (response.status === 200 && response.data) {
+                
+                console.log(response.data)
+                // Mettre à jour le store Redux avec les informations de connexion
+                dispatch(loginSuccess(response.data));
+
+                // Rediriger vers la page d'accueil après une connexion réussie
+                navigate('/');
             }
         } catch (error) {
-            setError('Email ou mot de passe incorrect');
+            // Gérer les erreurs spécifiques en fonction des réponses du backend
+            if (error.response && error.response.data) {
+                // Utiliser le message d'erreur spécifique envoyé par le backend, s'il existe
+                setError(error.response.data.message || 'Email ou mot de passe incorrect');
+            } else {
+                // Message d'erreur générique si aucun message spécifique n'est fourni
+                setError('Une erreur s\'est produite lors de la connexion');
+            }
+
+            // Dispatch de l'échec de connexion avec le message d'erreur
+            dispatch(loginFailure(error.message));
+
             console.error('Login error:', error);
         }
     };
@@ -86,9 +106,8 @@ export default Login;
 
 
 
-
 // import React, { useState } from 'react';
-// import { Container, Row, Col, Form, Button } from 'react-bootstrap';
+// import { Container, Row, Col, Form, Button, Alert } from 'react-bootstrap';
 // import { useNavigate } from 'react-router-dom';
 // import axios from 'axios';
 
@@ -98,6 +117,7 @@ export default Login;
 //         password: ''
 //     });
 
+//     const [error, setError] = useState('');
 //     const navigate = useNavigate();
 
 //     const handleChange = (e) => {
@@ -111,10 +131,15 @@ export default Login;
 //     const handleSubmit = async (e) => {
 //         e.preventDefault();
 //         try {
-//             const response = await axios.post('http://localhost:8002/api/users/login', formData);
-//             console.log(response);
-//             // navigate('/');
+//             const response = await axios.post('http://localhost:8002/api/users/login', formData, {
+//                 withCredentials: true // Inclure les cookies dans la requête
+//             });
+//             console.log(response)
+//             if (response.status === 200) {
+//                 navigate('/'); // Rediriger vers la page Home après connexion réussie
+//             }
 //         } catch (error) {
+//             setError('Email ou mot de passe incorrect');
 //             console.error('Login error:', error);
 //         }
 //     };
@@ -128,6 +153,7 @@ export default Login;
 //             <Row className="justify-content-md-center">
 //                 <Col md={6}>
 //                     <h3 className="text-center">Connexion</h3>
+//                     {error && <Alert variant="danger">{error}</Alert>}
 //                     <Form onSubmit={handleSubmit}>
 //                         <Form.Group controlId="formEmail">
 //                             <Form.Label>Email</Form.Label>
@@ -164,3 +190,6 @@ export default Login;
 // };
 
 // export default Login;
+
+
+

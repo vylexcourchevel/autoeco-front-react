@@ -1,6 +1,7 @@
 //store  importe les slieces
 import {configureStore} from "@reduxjs/toolkit"
 import sliceCar from "./reducers/sliceCar"
+import sliceAuth from "./reducers/sliceAuth"
 
 
 
@@ -16,7 +17,9 @@ La fonction se connecte automatiquement au DevTools
 // dans configuration du store je met jles slices
 export default configureStore({
     reducer:{ 
-        car : sliceCar
+        car : sliceCar,
+        auth : sliceAuth
+
    
     }
 })
