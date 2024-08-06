@@ -9,6 +9,7 @@ import AdminCarPage from './pages/AdminCarPage';
 import Errorpage from './pages/Errorpage';
 import ReservationForm from './pages/ReservationForm';  
 import DefaultLayout from './components/DefaultLayout';
+import Payment from './pages/Payment';
 
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
             <Route path="/admin" element={<AdminPage />} />
             <Route path="/admincar" element={<AdminCarPage />} />
             <Route path="/reservation" element={<ReservationForm />} />
+            <Route path="/payment/:carId" element={<Payment />} />
             <Route path="*" element={<Errorpage/>} />
           </Routes>
         </DefaultLayout>

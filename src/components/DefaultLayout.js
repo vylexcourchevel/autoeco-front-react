@@ -20,7 +20,7 @@ const DefaultLayout = (props) => {
       <div className="header" style={headerStyle}>
         <h1 style={titleStyle}>AUTOECO</h1>
         <button type="button" className="btn btn-primary btn-sm">
-          {isAuthenticated ? `Bonjour, ${user?.firstName}` : 'Inscription'}
+          {isAuthenticated ? `Bonjour, ${user?.firstName}` : 'Inscription | Connexion'}
         </button>
       </div>
       <div className="content">
