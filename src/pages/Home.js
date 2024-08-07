@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { FETCH_SUCCESS, FETCH_FAILURE } from '../redux/reducers/sliceCar';
+import {getCurrentUser} from "../redux/reducers/sliceAuth";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -24,7 +25,7 @@ const Home = () => {
         console.log('Error fetching car data:', error);
       }
     };
-
+    dispatch(getCurrentUser());
     fetchCar();
   }, [dispatch]);
 

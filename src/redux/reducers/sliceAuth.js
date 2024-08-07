@@ -1,15 +1,25 @@
 // src/redux/reducers/authSlice.js
-
+import axios from 'axios';
 // Importation de la fonction createSlice depuis Redux Toolkit
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 // Définition de l'état initial pour le slice d'authentification
 const initialState = {
     isAuthenticated: false, // Indique si l'utilisateur est authentifié ou non
     user: null,             // Contient les informations de l'utilisateur (initialement aucune)
     status: 'idle',         // Indique l'état actuel du slice, peut être 'idle', 'loading', 'succeeded', ou 'failed'
-    error: null             // Contient les messages d'erreur, s'il y en a
+    error: null,             // Contient les messages d'erreur, s'il y en a
+    loading: false
 };
+
+// Création d'une fonction asynchrone pour la connexion à l'API
+export const getCurrentUser = createAsyncThunk('auth/getCurrent', async () => {
+    const response = await axios.get('http://localhost:8002/api/users/getCurrent',  {
+        withCredentials: true
+    });
+
+    return response.data;
+});
 
 // Création du slice pour l'authentification avec Redux Toolkit
 const sliceAuth = createSlice({
@@ -37,6 +47,22 @@ const sliceAuth = createSlice({
             state.status = 'failed';             // Met à jour le statut à 'failed' pour indiquer que la connexion a échoué
             state.error = action.payload;        // Définit l'erreur à partir de l'action payload
         }
+    },
+    extraReducers: (builder) => {
+        builder
+            .addCase(getCurrentUser.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(getCurrentUser.fulfilled, (state, action) => {
+                state.loading = false;
+                console.log(action.payload);
+                state.user = action.payload;
+                state.isAuthenticated = true;
+            })
+            .addCase(getCurrentUser.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.error.message;
+            });
     }
 });
 
