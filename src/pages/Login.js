@@ -28,7 +28,9 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:8002/api/users/login', formData);
+            const response = await axios.post('http://localhost:8002/api/users/login', formData, {
+                withCredentials: true
+            });
 
             // Assurez-vous que la réponse contient les données nécessaires
             if (response.status === 200 && response.data) {
