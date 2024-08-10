@@ -15,6 +15,7 @@ import Errorpage from './pages/Errorpage';
 import ReservationForm from './pages/ReservationForm';
 import DefaultLayout from './components/DefaultLayout';
 import PaymentDashboard from './pages/PaymentDashboard';
+import ActivityDashboard from './pages/ActivityDashboard';
 
 function App() {
   const dispatch = useDispatch();
@@ -37,6 +38,7 @@ function App() {
             <Route path="/admincar" element={<AdminCarPage />} />
             <Route path="/reservation" element={<ReservationForm />} />
             <Route path="/payment/:carId" element={<PaymentDashboard />} />
+            <Route path="/activity" element={<ActivityDashboard />} />
             <Route path="*" element={<Errorpage />} />
           </Routes>
         </DefaultLayout>
