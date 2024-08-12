@@ -1,62 +1,69 @@
 import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import { FETCH_SUCCESS, FETCH_FAILURE } from '../redux/reducers/sliceCar';
-import {getCurrentUser} from "../redux/reducers/sliceAuth";
+import { useDispatch, useSelector } from 'react-redux'; // Importation des hooks pour interagir avec Redux
+import axios from 'axios'; // Bibliothèque pour effectuer des requêtes HTTP
+import { useNavigate } from 'react-router-dom'; // Hook pour la navigation entre les pages
+import { FETCH_SUCCESS, FETCH_FAILURE } from '../redux/reducers/sliceCar'; // Actions Redux pour gérer le succès ou l'échec de la récupération des voitures
+import { getCurrentUser } from "../redux/reducers/sliceAuth"; // Action pour obtenir l'utilisateur actuellement connecté
 
 const Home = () => {
-  const dispatch = useDispatch();
-  const cars = useSelector((state) => state.car.data);
-  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-  const navigate = useNavigate();
+  const dispatch = useDispatch(); // Hook pour dispatcher des actions Redux
+  const cars = useSelector((state) => state.car.data); // Sélectionne les données des voitures du store Redux
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated); // Vérifie si l'utilisateur est authentifié
+  const navigate = useNavigate(); // Hook pour naviguer entre les routes
 
   useEffect(() => {
+    // Fonction asynchrone pour récupérer les données des voitures
     const fetchCar = async () => {
-      console.log('Fetching car data...');
+      console.log('Fetching car data...'); // Log pour indiquer le début de la récupération des données
       try {
+        // Effectue une requête GET pour récupérer toutes les voitures depuis l'API
         const { data } = await axios.get("http://localhost:8002/api/cars/all", {
-          withCredentials: true
+          withCredentials: true // Inclut les cookies dans la requête pour l'authentification
         });
-        console.log('Fetched car data:', data);
-        dispatch(FETCH_SUCCESS(data));
+        console.log('Fetched car data:', data); // Log pour afficher les données récupérées
+        dispatch(FETCH_SUCCESS(data)); // Dispatch de l'action Redux pour stocker les données des voitures dans le store
       } catch (error) {
-        dispatch(FETCH_FAILURE(error.message));
-        console.log('Error fetching car data:', error);
+        dispatch(FETCH_FAILURE(error.message)); // Dispatch de l'action Redux pour indiquer une erreur lors de la récupération des données
+        console.log('Error fetching car data:', error); // Log pour afficher l'erreur
       }
     };
-    dispatch(getCurrentUser());
-    fetchCar();
-  }, [dispatch]);
 
+    // Dispatch pour obtenir l'utilisateur actuellement connecté
+    dispatch(getCurrentUser());
+    // Appelle la fonction pour récupérer les données des voitures
+    fetchCar();
+  }, [dispatch]); // Le tableau de dépendances inclut "dispatch" pour s'assurer que l'effet est exécuté correctement
+
+  // Fonction pour gérer le clic sur le bouton "Réserver"
   const handleReserveClick = (car) => {
-    console.log('Reserve button clicked for car:', car);
+    console.log('Reserve button clicked for car:', car); // Log pour indiquer que le bouton de réservation a été cliqué
     if (isAuthenticated) {
-      console.log('User is authenticated, navigating to payment page with car:', car);
+      console.log('User is authenticated, navigating to payment page with car:', car); // Log si l'utilisateur est authentifié
+      // Redirection vers la page de paiement en passant l'ID de la voiture dans l'URL
       navigate(`/payment/${car.id}`);
     } else {
-      console.log('User is not authenticated, showing alert.');
-      alert("Veuillez vous connecter pour réserver une voiture.");
+      console.log('User is not authenticated, showing alert.'); // Log si l'utilisateur n'est pas authentifié
+      alert("Veuillez vous connecter pour réserver une voiture."); // Affiche une alerte si l'utilisateur n'est pas connecté
     }
   };
 
   return (
     <div className="container">
       <div className="row">
-        {cars.length === 0 ? (
+        {cars.length === 0 ? ( // Si aucune voiture n'est disponible, affiche un message
           <p>Aucune voiture disponible</p>
-        ) : (
+        ) : ( // Sinon, map sur le tableau des voitures pour les afficher
           cars.map((car, index) => (
             <div key={index} className="col-md-4 card-container">
               <div className="card h-100">
-                {car.CarImages && car.CarImages.length > 0 ? (
+                {car.CarImages && car.CarImages.length > 0 ? ( // Affiche l'image de la voiture si disponible
                   <img
-                    src={`http://localhost:8002${car.CarImages[0].imageURL}`}
+                    src={`http://localhost:8002${car.CarImages[0].imageURL}`} // URL de l'image de la voiture
                     className="card-img-top"
-                    alt={`${car.brand} ${car.model}`}
+                    alt={`${car.brand} ${car.model}`} // Texte alternatif pour l'image
                     style={{ width: '100%', height: 'auto' }}
                   />
-                ) : (
+                ) : ( // Si aucune image n'est disponible, affiche une image par défaut
                   <img
                     src="/images/default.png"
                     className="card-img-top"
@@ -65,14 +72,14 @@ const Home = () => {
                   />
                 )}
                 <div className="card-body">
-                  <h5 className="card-title">{car.brand} {car.model}</h5>
-                  <p className="card-text">Année: {car.years}</p>
-                  <p className="card-text">Prix par jour: {car.pricePerDay} €</p>
-                  <p className="card-text">Disponibilité: {car.available ? 'Yes' : 'No'}</p>
-                  {isAuthenticated && (
+                  <h5 className="card-title">{car.brand} {car.model}</h5> {/* Affiche la marque et le modèle de la voiture */}
+                  <p className="card-text">Année: {car.years}</p> {/* Affiche l'année de la voiture */}
+                  <p className="card-text">Prix par jour: {car.pricePerDay} €</p> {/* Affiche le prix par jour */}
+                  <p className="card-text">Disponibilité: {car.available ? 'Yes' : 'No'}</p> {/* Affiche la disponibilité */}
+                  {isAuthenticated && ( // Affiche le bouton "Réserver" uniquement si l'utilisateur est connecté
                     <button
                       className="btn btn-primary mt-3"
-                      onClick={() => handleReserveClick(car)}
+                      onClick={() => handleReserveClick(car)} // Appelle la fonction de réservation au clic
                     >
                       Réserver
                     </button>
@@ -87,7 +94,7 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Home; // Exporte le composant Home pour l'utiliser dans d'autres parties de l'application
 
 
 

@@ -58,10 +58,10 @@ const Payment = () => {
         console.log(response);
         setShowConfirmation(true); // Afficher le message de confirmation
 
-        // Rediriger après 3 secondes
+        // Rediriger après 0,5 secondes
         setTimeout(() => {
           navigate('/');
-        }, 3000);
+        }, 500);
       } catch (error) {
         console.error('Error creating reservation:', error);
       }

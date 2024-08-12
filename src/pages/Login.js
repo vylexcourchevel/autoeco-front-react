@@ -43,7 +43,7 @@ const Login = () => {
                 // Optionnel: Rediriger vers la page d'accueil après un délai
                 setTimeout(() => {
                     navigate('/');
-                }, 3000);
+                }, 500);
             }
         } catch (error) {
             if (error.response && error.response.data) {
