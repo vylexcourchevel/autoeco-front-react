@@ -1,13 +1,18 @@
 
-// //src/pages/AdminDashboard.js 
 
+
+// //src/pages/AdminDashboard.js VERSION TEST 
+
+// Importation des modules nécessaires : React, useEffect, useState, et axios
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
+// Définition du composant fonctionnel AdminDashboard
 const AdminDashboard = () => {
-    const [users, setUsers] = useState([]);
-    const [error, setError] = useState(null);
-    const [editingUserId, setEditingUserId] = useState(null);
+    // Déclaration des états locaux à l'aide de useState
+    const [users, setUsers] = useState([]); // État pour stocker la liste des utilisateurs
+    const [error, setError] = useState(null); // État pour stocker les erreurs éventuelles
+    const [editingUserId, setEditingUserId] = useState(null); // État pour stocker l'ID de l'utilisateur en cours de modification
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
@@ -16,42 +21,47 @@ const AdminDashboard = () => {
         address: '',
         phoneNumber: '',
         isAdmin: false,
-    });
+    }); // État pour stocker les données du formulaire
 
+    // Utilisation de useEffect pour récupérer les utilisateurs lorsque le composant est monté
     useEffect(() => {
         const fetchUsers = async () => {
             try {
+                // Envoi de la requête GET pour récupérer les utilisateurs
                 const response = await axios.get('http://localhost:8002/api/users/all', {
-                    withCredentials: true
+                    withCredentials: true // Permet d'envoyer les cookies avec la requête
                 });
                 if (response.status === 200) {
-                    setUsers(response.data);
+                    setUsers(response.data); // Mise à jour de l'état users avec les données reçues
                 } else {
-                    setError(`Erreur inattendue: ${response.statusText}`);
+                    setError(`Erreur inattendue: ${response.statusText}`); // Mise à jour de l'état error en cas d'erreur de réponse
                 }
             } catch (err) {
-                setError("Une erreur s'est produite lors de la récupération des utilisateurs.");
+                setError("Une erreur s'est produite lors de la récupération des utilisateurs."); // Mise à jour de l'état error en cas d'erreur lors de la requête
             }
         };
 
-        fetchUsers();
-    }, []);
+        fetchUsers(); // Appel de la fonction fetchUsers
+    }, []); // Dépendances vides signifie que useEffect s'exécute uniquement lors du premier rendu
 
+    // Fonction pour gérer les changements dans le formulaire
     const handleChange = (e) => {
-        const { name, value, type, checked } = e.target;
+        const { name, value, type, checked } = e.target; // Destructuration des propriétés de l'événement cible
         setFormData({
-            ...formData,
-            [name]: type === 'checkbox' ? checked : value,
+            ...formData, // Copie des données du formulaire existantes
+            [name]: type === 'checkbox' ? checked : value, // Mise à jour de la valeur du champ en fonction du type
         });
     };
 
+    // Fonction pour gérer la soumission du formulaire d'ajout d'utilisateur
     const handleSubmit = async (e) => {
-        e.preventDefault();
+        e.preventDefault(); // Prévention du comportement par défaut du formulaire
         try {
+            // Envoi de la requête POST pour ajouter un utilisateur
             const response = await axios.post('http://localhost:8002/api/users/add', formData, {
                 withCredentials: true
             });
-            alert('Utilisateur ajouté avec succès');
+            alert('Utilisateur ajouté avec succès'); // Message de succès
             setFormData({
                 firstName: '',
                 lastName: '',
@@ -60,35 +70,38 @@ const AdminDashboard = () => {
                 address: '',
                 phoneNumber: '',
                 isAdmin: false,
-            });
-            setUsers([...users, response.data]);
+            }); // Réinitialisation des données du formulaire
+            setUsers([...users, response.data]); // Ajout du nouvel utilisateur à la liste des utilisateurs
         } catch (error) {
-            alert('Erreur lors de l\'ajout de l\'utilisateur');
+            alert('Erreur lors de l\'ajout de l\'utilisateur'); // Message d'erreur
         }
     };
 
+    // Fonction pour gérer le clic sur le bouton d'édition d'un utilisateur
     const handleEditClick = (user) => {
-        setEditingUserId(user.id);
+        setEditingUserId(user.id); // Définition de l'ID de l'utilisateur à modifier
         setFormData({
             firstName: user.firstName,
             lastName: user.lastName,
             email: user.email,
-            password: '', // Optionnel, ne pas pré-remplir le mot de passe
+            password: '', // Mot de passe ne doit pas être pré-rempli
             address: user.address,
             phoneNumber: user.phoneNumber,
             isAdmin: user.isAdmin,
-        });
+        }); // Remplissage du formulaire avec les données de l'utilisateur à modifier
     };
 
+    // Fonction pour gérer la mise à jour des informations d'un utilisateur
     const handleUpdate = async (e) => {
-        e.preventDefault();
+        e.preventDefault(); // Prévention du comportement par défaut du formulaire
         try {
+            // Envoi de la requête PUT pour mettre à jour les informations de l'utilisateur
             await axios.put(`http://localhost:8002/api/users/update/${editingUserId}`, formData, {
                 withCredentials: true
             });
-            alert('Utilisateur mis à jour avec succès');
-            setUsers(users.map(user => user.id === editingUserId ? { ...user, ...formData } : user));
-            setEditingUserId(null);
+            alert('Utilisateur mis à jour avec succès'); // Message de succès
+            setUsers(users.map(user => user.id === editingUserId ? { ...user, ...formData } : user)); // Mise à jour de la liste des utilisateurs avec les nouvelles données
+            setEditingUserId(null); // Réinitialisation de l'ID de l'utilisateur en cours de modification
             setFormData({
                 firstName: '',
                 lastName: '',
@@ -97,34 +110,38 @@ const AdminDashboard = () => {
                 address: '',
                 phoneNumber: '',
                 isAdmin: false,
-            });
+            }); // Réinitialisation des données du formulaire
         } catch (error) {
-            alert('Erreur lors de la mise à jour de l\'utilisateur');
+            alert('Erreur lors de la mise à jour de l\'utilisateur'); // Message d'erreur
         }
     };
 
+    // Fonction pour basculer le statut d'administrateur d'un utilisateur
     const toggleAdminStatus = async (userId, currentStatus) => {
         try {
-            const newStatus = !currentStatus;
+            const newStatus = !currentStatus; // Inversion du statut actuel
+            // Envoi de la requête POST pour mettre à jour le statut d'administrateur
             await axios.post(`http://localhost:8002/api/users/admin/${userId}`, { isAdmin: newStatus }, {
                 withCredentials: true
             });
             setUsers(users.map(user =>
                 user.id === userId ? { ...user, isAdmin: newStatus } : user
-            ));
+            )); // Mise à jour de la liste des utilisateurs avec le nouveau statut
         } catch (err) {
-            setError("Une erreur s'est produite lors de la mise à jour du statut d'admin.");
+            setError("Une erreur s'est produite lors de la mise à jour du statut d'admin."); // Mise à jour de l'état error en cas d'erreur
         }
     };
 
+    // Fonction pour supprimer un utilisateur
     const deleteUser = async (userId) => {
         try {
+            // Envoi de la requête DELETE pour supprimer l'utilisateur
             await axios.delete(`http://localhost:8002/api/users/delete/${userId}`, {
                 withCredentials: true
             });
-            setUsers(users.filter(user => user.id !== userId));
+            setUsers(users.filter(user => user.id !== userId)); // Mise à jour de la liste des utilisateurs en excluant l'utilisateur supprimé
         } catch (err) {
-            setError("Une erreur s'est produite lors de la suppression de l'utilisateur.");
+            setError("Une erreur s'est produite lors de la suppression de l'utilisateur."); // Mise à jour de l'état error en cas d'erreur
         }
     };
 
@@ -295,7 +312,7 @@ const AdminDashboard = () => {
             )}
 
             <h2>Liste des utilisateurs</h2>
-            {error && <p style={{ color: 'red' }}>{error}</p>}
+            {error && <p style={{ color: 'red' }}>{error}</p>} {/* Affichage des messages d'erreur */}
             <div className="user-list">
                 {users.map(user => (
                     <div key={user.id} className="user-container">
@@ -333,7 +350,6 @@ const AdminDashboard = () => {
 };
 
 export default AdminDashboard;
-
 
 
 // //src/pages/AdminDashboard.js C EST OK  CELUI LA !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
