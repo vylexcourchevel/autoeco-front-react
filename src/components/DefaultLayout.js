@@ -1,6 +1,4 @@
-//src/components/DefaultLayout.js VERSION TEST 
-
-
+//src/components/DefaultLayout.js version TEST 
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
@@ -9,9 +7,9 @@ import axios from 'axios';
 
 const DefaultLayout = (props) => {
   const navigate = useNavigate();
-  const location = useLocation();
+  const location = useLocation();  // Utilisation de useLocation pour savoir sur quelle page on se trouve
   const dispatch = useDispatch();
-  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const { isAuthenticated, isAdmin } = useSelector((state) => state.auth);
 
   const headerStyle = {
     backgroundColor: '#343a40',
@@ -44,44 +42,92 @@ const DefaultLayout = (props) => {
     navigate('/register');
   };
 
-  const AuthButton = () => {
-    const isLoginPage = location.pathname === '/login';
-    const isAdminDashboard = location.pathname === '/adminboard';
-    const isAdminPage = location.pathname === '/admin'; // Ajout de la vérification pour AdminPage
+  const handleDashboardClick = () => {
+    navigate('/adminboard');
+  };
 
-    if (isLoginPage || isAdminDashboard || isAdminPage) {
-      return null;
+  const handleVehiclesListClick = () => {
+    navigate('/admin');  // Redirige vers la liste des véhicules
+  };
+
+  const handleHomeClick = () => {
+    navigate('/');
+  };
+
+  const AuthButton = () => {
+    if (isAuthenticated && isAdmin) {
+      return (
+        <div>
+          {/* Si l'utilisateur est sur la page AdminDashboard, on affiche le bouton "Liste des véhicules" */}
+          {location.pathname === '/adminboard' ? (
+            <button 
+              type="button" 
+              className="btn btn-primary btn-sm" 
+              onClick={handleVehiclesListClick}
+            >
+              Liste des véhicules
+            </button>
+          ) : (
+            // Sinon on affiche le bouton "Tableau de bord"
+            <button 
+              type="button" 
+              className="btn btn-primary btn-sm" 
+              onClick={handleDashboardClick}
+            >
+              Tableau de bord
+            </button>
+          )}
+          <button 
+            type="button" 
+            className="btn btn-danger btn-sm"
+            style={{ marginLeft: '10px' }}
+            onClick={handleLogoutClick}
+          >
+            Déconnexion
+          </button>
+        </div>
+      );
+    }
+
+    if (isAuthenticated) {
+      return (
+        <div>
+          <button 
+            type="button" 
+            className="btn btn-secondary btn-sm"
+            onClick={handleHomeClick}
+          >
+            Accueil
+          </button>
+          <button 
+            type="button" 
+            className="btn btn-danger btn-sm"
+            style={{ marginLeft: '10px' }}
+            onClick={handleLogoutClick}
+          >
+            Déconnexion
+          </button>
+        </div>
+      );
     }
 
     return (
       <div>
-        {!isAuthenticated ? (
-          <>
-            <button 
-              type="button" 
-              className="btn btn-primary btn-sm"
-              onClick={handleLoginClick}
-            >
-              Connexion
-            </button>
-            <button 
-              type="button" 
-              className="btn btn-secondary btn-sm" 
-              style={{ marginLeft: '10px' }}
-              onClick={handleSignupClick}
-            >
-              Inscription
-            </button>
-          </>
-        ) : (
-          <button 
-            type="button" 
-              className="btn btn-danger btn-sm"
-              onClick={handleLogoutClick}
-          >
-            Déconnexion
-          </button>
-        )}
+        <button 
+          type="button" 
+          className="btn btn-primary btn-sm"
+          onClick={handleLoginClick}
+        >
+          Connexion
+        </button>
+        <button 
+          type="button" 
+          className="btn btn-secondary btn-sm" 
+          style={{ marginLeft: '10px' }}
+          onClick={handleSignupClick}
+        >
+          Inscription
+        </button>
       </div>
     );
   };
@@ -102,9 +148,392 @@ const DefaultLayout = (props) => {
 export default DefaultLayout;
 
 
+// // src/components/DefaultLayout.js
+
+// import React from 'react';
+// import { useNavigate, useLocation } from 'react-router-dom';
+// import { useSelector, useDispatch } from 'react-redux';
+// import { logout } from '../redux/reducers/sliceAuth';
+// import axios from 'axios';
+
+// const DefaultLayout = (props) => {
+//   const navigate = useNavigate();
+//   const location = useLocation();
+//   const dispatch = useDispatch();
+//   const { isAuthenticated, isAdmin } = useSelector((state) => state.auth); // Suppose que `isAdmin` est dans le state
+
+//   const headerStyle = {
+//     backgroundColor: '#343a40',
+//     padding: '10px',
+//     display: 'flex',
+//     justifyContent: 'space-between',
+//     alignItems: 'center',
+//   };
+
+//   const titleStyle = {
+//     margin: 0,
+//     color: 'white',
+//   };
+
+//   const handleLogoutClick = async () => {
+//     try {
+//       await axios.post('http://localhost:8002/api/users/logout', {}, { withCredentials: true });
+//       dispatch(logout());
+//       navigate('/');
+//     } catch (error) {
+//       console.error('Erreur lors de la déconnexion :', error);
+//     }
+//   };
+
+//   const handleLoginClick = () => {
+//     navigate('/login');
+//   };
+
+//   const handleSignupClick = () => {
+//     navigate('/register');
+//   };
+
+//   const handleDashboardClick = () => {
+//     navigate('/adminboard');
+//   };
+
+//   const handleHomeClick = () => {
+//     navigate('/'); // Assurez-vous que la route vers la page d'accueil est correcte
+//   };
+
+//   const AuthButton = () => {
+//     // Si l'utilisateur est admin et authentifié
+//     if (isAuthenticated && isAdmin) {
+//       return (
+//         <div>
+//           <button 
+//             type="button" 
+//             className="btn btn-secondary btn-sm"
+//             onClick={handleHomeClick}
+//           >
+//             Accueil
+//           </button>
+//           <button 
+//             type="button" 
+//             className="btn btn-primary btn-sm" 
+//             style={{ marginLeft: '10px' }}
+//             onClick={handleDashboardClick}
+//           >
+//             Tableau de bord
+//           </button>
+//           <button 
+//             type="button" 
+//             className="btn btn-danger btn-sm"
+//             style={{ marginLeft: '10px' }}
+//             onClick={handleLogoutClick}
+//           >
+//             Déconnexion
+//           </button>
+//         </div>
+//       );
+//     }
+
+//     // Si l'utilisateur est authentifié mais pas admin
+//     if (isAuthenticated) {
+//       return null; // Pas de boutons spécifiques pour les utilisateurs normaux
+//     }
+
+//     // Si l'utilisateur n'est pas authentifié
+//     return (
+//       <div>
+//         <button 
+//           type="button" 
+//           className="btn btn-primary btn-sm"
+//           onClick={handleLoginClick}
+//         >
+//           Connexion
+//         </button>
+//         <button 
+//           type="button" 
+//           className="btn btn-secondary btn-sm" 
+//           style={{ marginLeft: '10px' }}
+//           onClick={handleSignupClick}
+//         >
+//           Inscription
+//         </button>
+//       </div>
+//     );
+//   };
+
+//   return (
+//     <div>
+//       <div className="header" style={headerStyle}>
+//         <h1 style={titleStyle}>AUTOECO</h1>
+//         <AuthButton />
+//       </div>
+//       <div className="content">
+//         {props.children}
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default DefaultLayout;
+
 
 
 // // src/components/DefaultLayout.js
+
+// import React from 'react';
+// import { useNavigate, useLocation } from 'react-router-dom';
+// import { useSelector, useDispatch } from 'react-redux';
+// import { logout } from '../redux/reducers/sliceAuth';
+// import axios from 'axios';
+
+// const DefaultLayout = (props) => {
+//   const navigate = useNavigate();
+//   const location = useLocation();
+//   const dispatch = useDispatch();
+//   const { isAuthenticated, isAdmin } = useSelector((state) => state.auth); // Suppose que `isAdmin` est dans le state
+
+//   const headerStyle = {
+//     backgroundColor: '#343a40',
+//     padding: '10px',
+//     display: 'flex',
+//     justifyContent: 'space-between',
+//     alignItems: 'center',
+//   };
+
+//   const titleStyle = {
+//     margin: 0,
+//     color: 'white',
+//   };
+
+//   const handleLogoutClick = async () => {
+//     try {
+//       await axios.post('http://localhost:8002/api/users/logout', {}, { withCredentials: true });
+//       dispatch(logout());
+//       navigate('/');
+//     } catch (error) {
+//       console.error('Erreur lors de la déconnexion :', error);
+//     }
+//   };
+
+//   const handleLoginClick = () => {
+//     navigate('/login');
+//   };
+
+//   const handleSignupClick = () => {
+//     navigate('/register');
+//   };
+
+//   const handleDashboardClick = () => {
+//     navigate('/adminboard');
+//   };
+
+//   const handleHomeClick = () => {
+//     navigate('/'); // Assurez-vous que la route vers la page d'accueil est correcte
+//   };
+
+//   const AuthButton = () => {
+//     // Si l'utilisateur est admin et authentifié
+//     if (isAuthenticated && isAdmin) {
+//       return (
+//         <div>
+//           <button 
+//             type="button" 
+//             className="btn btn-secondary btn-sm"
+//             onClick={handleHomeClick}
+//           >
+//             Accueil
+//           </button>
+//           <button 
+//             type="button" 
+//             className="btn btn-primary btn-sm" 
+//             style={{ marginLeft: '10px' }}
+//             onClick={handleDashboardClick}
+//           >
+//             Tableau de bord
+//           </button>
+//           <button 
+//             type="button" 
+//             className="btn btn-danger btn-sm"
+//             style={{ marginLeft: '10px' }}
+//             onClick={handleLogoutClick}
+//           >
+//             Déconnexion
+//           </button>
+//         </div>
+//       );
+//     }
+
+//     // Si l'utilisateur est authentifié mais pas admin
+//     if (isAuthenticated) {
+//       return null; // Pas de boutons spécifiques pour les utilisateurs normaux
+//     }
+
+//     // Si l'utilisateur n'est pas authentifié
+//     return (
+//       <div>
+//         <button 
+//           type="button" 
+//           className="btn btn-primary btn-sm"
+//           onClick={handleLoginClick}
+//         >
+//           Connexion
+//         </button>
+//         <button 
+//           type="button" 
+//           className="btn btn-secondary btn-sm" 
+//           style={{ marginLeft: '10px' }}
+//           onClick={handleSignupClick}
+//         >
+//           Inscription
+//         </button>
+//       </div>
+//     );
+//   };
+
+//   return (
+//     <div>
+//       <div className="header" style={headerStyle}>
+//         <h1 style={titleStyle}>AUTOECO</h1>
+//         <AuthButton />
+//       </div>
+//       <div className="content">
+//         {props.children}
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default DefaultLayout;
+
+
+
+
+// // //src/components/DefaultLayout.js VERSION TEST
+
+// import React from 'react';
+// import { useNavigate, useLocation } from 'react-router-dom';
+// import { useSelector, useDispatch } from 'react-redux';
+// import { logout } from '../redux/reducers/sliceAuth';
+// import axios from 'axios';
+
+// const DefaultLayout = (props) => {
+//   const navigate = useNavigate();
+//   const location = useLocation();
+//   const dispatch = useDispatch();
+//   const { isAuthenticated, isAdmin } = useSelector((state) => state.auth); // Suppose que `isAdmin` est dans le state
+
+//   const headerStyle = {
+//     backgroundColor: '#343a40',
+//     padding: '10px',
+//     display: 'flex',
+//     justifyContent: 'space-between',
+//     alignItems: 'center',
+//   };
+
+//   const titleStyle = {
+//     margin: 0,
+//     color: 'white',
+//   };
+
+//   const handleLogoutClick = async () => {
+//     try {
+//       await axios.post('http://localhost:8002/api/users/logout', {}, { withCredentials: true });
+//       dispatch(logout());
+//       navigate('/');
+//     } catch (error) {
+//       console.error('Erreur lors de la déconnexion :', error);
+//     }
+//   };
+
+//   const handleLoginClick = () => {
+//     navigate('/login');
+//   };
+
+//   const handleSignupClick = () => {
+//     navigate('/register');
+//   };
+
+//   const handleDashboardClick = () => {
+//     navigate('/adminboard');
+//   };
+
+//   const handleHomeClick = () => {
+//     navigate('/');
+//   };
+
+//   const AuthButton = () => {
+//     // Si l'utilisateur est admin et authentifié
+//     if (isAuthenticated && isAdmin) {
+//       return (
+//         <div>
+//           <button 
+//             type="button" 
+//             className="btn btn-secondary btn-sm"
+//             onClick={handleHomeClick}
+//           >
+//             Accueil
+//           </button>
+//           <button 
+//             type="button" 
+//             className="btn btn-primary btn-sm" 
+//             style={{ marginLeft: '10px' }}
+//             onClick={handleDashboardClick}
+//           >
+//             Tableau de bord
+//           </button>
+//           <button 
+//             type="button" 
+//             className="btn btn-danger btn-sm"
+//             style={{ marginLeft: '10px' }}
+//             onClick={handleLogoutClick}
+//           >
+//             Déconnexion
+//           </button>
+//         </div>
+//       );
+//     }
+
+//     // Si l'utilisateur est authentifié mais pas admin
+//     if (isAuthenticated) {
+//       return null; // Pas de boutons spécifiques pour les utilisateurs normaux
+//     }
+
+//     // Si l'utilisateur n'est pas authentifié
+//     return (
+//       <div>
+//         <button 
+//           type="button" 
+//           className="btn btn-primary btn-sm"
+//           onClick={handleLoginClick}
+//         >
+//           Connexion
+//         </button>
+//         <button 
+//           type="button" 
+//           className="btn btn-secondary btn-sm" 
+//           style={{ marginLeft: '10px' }}
+//           onClick={handleSignupClick}
+//         >
+//           Inscription
+//         </button>
+//       </div>
+//     );
+//   };
+
+//   return (
+//     <div>
+//       <div className="header" style={headerStyle}>
+//         <h1 style={titleStyle}>AUTOECO</h1>
+//         <AuthButton />
+//       </div>
+//       <div className="content">
+//         {props.children}
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default DefaultLayout;
+
 
 // import React from 'react';
 // import { useNavigate, useLocation } from 'react-router-dom';

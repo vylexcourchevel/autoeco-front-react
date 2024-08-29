@@ -1,3 +1,5 @@
+//src/components/AuthButton.js 
+
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
