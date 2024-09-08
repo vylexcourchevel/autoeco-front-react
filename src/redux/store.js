@@ -1,4 +1,4 @@
-//store  importe les slieces
+//src/redux/store.js
 import {configureStore} from "@reduxjs/toolkit"
 import sliceCar from "./reducers/sliceCar"
 import sliceAuth from "./reducers/sliceAuth"

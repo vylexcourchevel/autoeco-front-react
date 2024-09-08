@@ -1,3 +1,7 @@
+
+
+//src/redux/reducers/sliceCar.js VERSION OK 
+
 import { createSlice } from "@reduxjs/toolkit";
 
 // Définition de l'état initial
