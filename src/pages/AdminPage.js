@@ -456,7 +456,7 @@ const AdminPage = () => {
                     <h5 className="card-title">{vehicle.brand} {vehicle.model}</h5>
                     <p className="card-text">Année: {vehicle.years}</p>
                     <p className="card-text">Prix par jour: {vehicle.pricePerDay} €</p>
-                    <p className="card-text">Disponibilité: {vehicle.available ? 'Oui' : 'Non'}</p>
+                   
                     <button
                       className="btn btn-warning"
                       onClick={() => handleEditClick(vehicle)}

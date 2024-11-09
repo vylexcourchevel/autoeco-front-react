@@ -76,7 +76,7 @@ const Home = () => {
                   <p className="card-text">Plaque d'immatriculation: {car.registrationPlate}</p>
                   <p className="card-text">Année: {car.years}</p>
                   <p className="card-text">Prix par jour: {car.pricePerDay} €</p>
-                  <p className="card-text">Disponibilité: {car.available ? 'Yes' : 'No'}</p>
+              
                   {isAuthenticated && (
                     <button
                       className="btn btn-primary mt-3"
