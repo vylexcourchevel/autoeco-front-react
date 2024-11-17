@@ -107,7 +107,7 @@ export default DefaultLayout;
 
 
 
-// // src/components/DefaultLayout.js VERSION QUI MARCHE 
+// src/components/DefaultLayout.js VERSION QUI MARCHE 
 
 // import React from 'react';
 

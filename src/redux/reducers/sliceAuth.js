@@ -76,7 +76,7 @@ export const { loginSuccess, logout, loginFailure } = sliceAuth.actions;
 export default sliceAuth.reducer;
 
 
-// //src/redux/reducers/sliceAuth.js VERSION ok 
+//src/redux/reducers/sliceAuth.js VERSION ok 
 
 // import axios from 'axios';
 // // Importation d'axios pour effectuer des requêtes HTTP
