@@ -18,6 +18,7 @@ import PaymentDashboard from './pages/PaymentDashboard';
 import ActivityDashboard from './pages/ActivityDashboard';
 import AdminDashboard from './pages/AdminDashboard';
 import ProtectedRoute from './components/ProtectedRoute';
+import ResetPasswordPage from './pages/ResetPasswordPage';
 
 function App() {
   const dispatch = useDispatch();
@@ -33,16 +34,10 @@ function App() {
           <Routes>
             {/* Route d'accueil accessible à tous */}
             <Route path="/" element={<Home />} />
+            <Route path="/reset-password/:token" element={ResetPasswordPage} />
+            <Route path="/login" element={<Login />} />
 
-            {/* Routes pour les utilisateurs authentifiés */}
-            <Route
-              path="/login"
-              element={
-                <ProtectedRoute>
-                  <Login />
-                </ProtectedRoute>
-              }
-            />
+
             <Route
               path="/register"
               element={
