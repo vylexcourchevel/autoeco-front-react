@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const ResetPasswordPage = () => {
   const { token } = useParams(); // Récupère le token dans l'URL
@@ -9,25 +10,48 @@ const ResetPasswordPage = () => {
   const [error, setError] = useState(null); // État des erreurs
   const [success, setSuccess] = useState(false); // État pour indiquer un succès
 
+  console.log('Token reçu dans l’URL :', token);
+
+  useEffect(() => {
+    if (!token) {
+      console.error('Token manquant dans l’URL');
+      navigate('/error'); // Redirige vers une page d’erreur ou affiche un message
+    }
+  }, [token, navigate]);
+  
+
+  // Log initial pour vérifier les paramètres
+  useEffect(() => {
+    console.log('Token reçu dans l’URL :', token);
+  }, [token]);
+  
+
   const handleSubmit = async (e) => {
     e.preventDefault(); // Empêche le rafraîchissement de la page
 
-    try {
-      console.log('Submitting new password...');
-      const response = await axios.post('/api/reset-password', { token, newPassword });
+    console.log('Tentative de soumission avec le nouveau mot de passe...');
+    console.log('Token utilisé pour la requête :', token);
+    console.log('Nouveau mot de passe :', newPassword);
 
-      console.log('Response:', response.data); // Vérifiez ce qui est retourné
+    try {
+      const response = await axios.post(`http://localhost:8002/api/users/reset-password`, { token,newPassword });
+
+      console.log('Réponse reçue du backend :', response.data);
       if (response.status === 200) {
+        console.log('Mot de passe réinitialisé avec succès.');
         setSuccess(true);
-        // Redirige l'utilisateur vers la page de connexion après 3 secondes
-        setTimeout(() => {
-          navigate('/login');
-        }, 3000);
+
+        // // Redirige l'utilisateur vers la page de connexion après 3 secondes
+        // setTimeout(() => {
+        //   console.log('Redirection vers la page de connexion...');
+        //   navigate("/reset-password/:token");
+        // }, 3000);
       } else {
+        console.error('Erreur retournée par le backend :', response.data.message);
         setError(response.data.message || 'Erreur inconnue.');
       }
     } catch (err) {
-      console.error('Error during reset password:', err);
+      console.error('Erreur lors de la tentative de réinitialisation :', err);
       setError(err.response?.data?.message || 'Une erreur est survenue lors de la réinitialisation.');
     }
   };
@@ -59,6 +83,69 @@ const ResetPasswordPage = () => {
 };
 
 export default ResetPasswordPage;
+
+
+// import React, { useState } from 'react';
+// import { useParams, useNavigate } from 'react-router-dom';
+// import axios from 'axios';
+
+// const ResetPasswordPage = () => {
+//   const { token } = useParams(); // Récupère le token dans l'URL
+//   const navigate = useNavigate(); // Pour rediriger après succès
+//   const [newPassword, setNewPassword] = useState(''); // Nouveau mot de passe
+//   const [error, setError] = useState(null); // État des erreurs
+//   const [success, setSuccess] = useState(false); // État pour indiquer un succès
+
+//   const handleSubmit = async (e) => {
+//     e.preventDefault(); // Empêche le rafraîchissement de la page
+
+//     try {
+//       console.log('Submitting new password...');
+//       const response = await axios.post('/api/reset-password', { token, newPassword });
+
+//       console.log('Response:', response.data); // Vérifiez ce qui est retourné
+//       if (response.status === 200) {
+//         setSuccess(true);
+//         // Redirige l'utilisateur vers la page de connexion après 3 secondes
+//         setTimeout(() => {
+//           navigate('/login');
+//         }, 3000);
+//       } else {
+//         setError(response.data.message || 'Erreur inconnue.');
+//       }
+//     } catch (err) {
+//       console.error('Error during reset password:', err);
+//       setError(err.response?.data?.message || 'Une erreur est survenue lors de la réinitialisation.');
+//     }
+//   };
+
+//   return (
+//     <div>
+//       <h1>Réinitialisation du mot de passe</h1>
+//       {success ? (
+//         <p>
+//           Votre mot de passe a été réinitialisé avec succès. Vous allez être redirigé vers la page de connexion.
+//         </p>
+//       ) : (
+//         <form onSubmit={handleSubmit}>
+//           <label>
+//             Nouveau mot de passe :
+//             <input
+//               type="password"
+//               value={newPassword}
+//               onChange={(e) => setNewPassword(e.target.value)}
+//               required
+//             />
+//           </label>
+//           <button type="submit">Réinitialiser</button>
+//         </form>
+//       )}
+//       {error && <p style={{ color: 'red' }}>{error}</p>}
+//     </div>
+//   );
+// };
+
+// export default ResetPasswordPage;
 
 
 // import React, { useState, useEffect } from 'react';

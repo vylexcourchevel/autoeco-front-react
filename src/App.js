@@ -34,7 +34,7 @@ function App() {
           <Routes>
             {/* Route d'accueil accessible à tous */}
             <Route path="/" element={<Home />} />
-            <Route path="/reset-password/:token" element={ResetPasswordPage} />
+            <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
             <Route path="/login" element={<Login />} />
 
 
