@@ -4,7 +4,7 @@ import './App.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
-import { logout } from './redux/reducers/sliceAuth';
+//import { logout } from './redux/reducers/sliceAuth';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -19,6 +19,14 @@ import ActivityDashboard from './pages/ActivityDashboard';
 import AdminDashboard from './pages/AdminDashboard';
 import ProtectedRoute from './components/ProtectedRoute';
 import ResetPasswordPage from './pages/ResetPasswordPage';
+import BasketStripe from './pages/PageBasket/BasketStripe';
+
+
+//PAGES COMPONENTS 
+
+import BasketStripeCheckout from './pages/PageBasket/BasketStripe';
+import Success from './components/stripe/success';
+import  Canceled from './components/stripe/canceled'; 
 
 function App() {
   const dispatch = useDispatch();
@@ -36,6 +44,10 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/basket" element={<BasketStripe />} />
+            <Route path="/checkout" element={<BasketStripeCheckout />} />
+            <Route path="/success" element={<success />} />
+            <Route path="/canceled" element={<Canceled />} />
 
 
             <Route
