@@ -58,28 +58,16 @@ const Payment = () => {
           },
           { withCredentials: true }
         );
-
         // Créer une session Stripe
         const stripeResponse = await axios.post(
-          'http://localhost:8002/api/checkout/create-session',
+          'http://localhost:8002/api/stripe/create-checkout-session',
           {
-            line_items: [
-              {
-                price_data: {
-                  currency: 'eur',
-                  product_data: {
-                    name: `${car.brand} ${car.model}`,
-                  },
-                  unit_amount: totalPrice * 100, // Convertir en centimes
-                },
-                quantity: 1,
-              },
-            ],
-            customer_email: reservationResponse.data.customerEmail, // Utiliser l'email du client
-          }
+            carId: car.id,
+            totalPrice,
+          },
+          { withCredentials: true }
         );
-
-        // Redirection vers Stripe Checkout
+        // // Redirection vers Stripe Checkout
         window.location.href = stripeResponse.data.url;
       } catch (error) {
         console.error('Erreur lors du paiement avec Stripe:', error);
@@ -138,7 +126,7 @@ const Payment = () => {
 export default Payment;
 
 
-// //src/components/Payment.js  OK 
+// //src/components/Payment.js  OK
 // import React, { useEffect, useState } from 'react';
 // import { useParams, useNavigate } from 'react-router-dom';
 // import DatePicker from 'react-datepicker';
@@ -192,7 +180,7 @@ export default Payment;
 //         const response = await axios.post('http://localhost:8002/api/reservations/add', {
 //           startDate,
 //           endDate,
-//           totalPrice, 
+//           totalPrice,
 //           CarId: car.id
 //         }, {
 //           withCredentials: true,
@@ -216,8 +204,8 @@ export default Payment;
 //     <div className="d-flex justify-content-center align-items-center" style={{ height: '100vh' }}>
 //       <div style={{ position: 'relative', width: '100%', maxWidth: '600px' }}>
 //         {showConfirmation && (
-//           <div 
-//             className="alert alert-success text-center" 
+//           <div
+//             className="alert alert-success text-center"
 //             role="alert"
 //             style={{ position: 'absolute', top: '0', width: '100%' }}
 //           >
