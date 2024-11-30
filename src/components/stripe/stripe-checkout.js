@@ -8,9 +8,14 @@ const StripeCheckout = ({ totalPrice, carId }) => {
   const handleCheckout = async (e) => {
     e.preventDefault();
 
+    // Affiche les valeurs des variables pour vérifier leur contenu
+    console.log('Total Price:', totalPrice);
+    console.log('Car ID:', carId);
+    console.log('Email:', email);
+
     // Créez la session sur le backend
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/create-checkout-session`, {
+      const response = await fetch('http://localhost:8002/api/stripe/create-checkout-session', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -22,11 +27,22 @@ const StripeCheckout = ({ totalPrice, carId }) => {
         }),
       });
 
-      const { sessionId } = await response.json();
+      // Log de la réponse brute du backend
+      console.log('Réponse brute:', response);
+
+      // Convertir la réponse en JSON
+      const data = await response.json();
+      console.log('Réponse JSON:', data);
+
+      // Vérifie si la sessionId est présente
+      if (!data.sessionId) {
+        console.error('Session ID non trouvé dans la réponse:', data);
+        return;
+      }
 
       // Redirigez l'utilisateur vers Stripe Checkout avec l'ID de session
       const { error } = await stripe.redirectToCheckout({
-        sessionId: sessionId,
+        sessionId: data.sessionId,
       });
 
       if (error) {
@@ -79,6 +95,7 @@ export default StripeCheckout;
 //           email
 //         }),
 //       });
+//       console.log('voici la response',response);
 
 //       const { sessionId } = await response.json();
 

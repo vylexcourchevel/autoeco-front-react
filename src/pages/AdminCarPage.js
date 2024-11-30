@@ -1,3 +1,6 @@
+
+
+
 import React, { useEffect } from 'react'; // Importation de React et du hook useEffect
 import { useDispatch, useSelector } from 'react-redux'; // Utilisation de Redux pour la gestion de l'état global
 import axios from 'axios'; // Pour effectuer des requêtes HTTP
@@ -13,7 +16,7 @@ const AdminCarPage = () => {
   const fetchCars = async () => {
     dispatch({ type: 'FETCH_CARS_LOADING' }); // Optionnel : met à jour l'état pour signaler le chargement
     try {
-      const { data } = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/cars/all`); // Récupération des voitures
+      const { data } = await axios.get('http://localhost:8002/api/cars/all'); // Récupération des voitures
       console.log('Fetched car data:', data); // Log pour débogage
       dispatch(FETCH_SUCCESS(data)); // Mise à jour des données dans Redux en cas de succès
     } catch (error) {
@@ -31,7 +34,7 @@ const AdminCarPage = () => {
   const handleDelete = async (carId) => {
     console.log(carId); // Log pour vérifier l'ID
     try {
-      await axios.delete(`${process.env.REACT_APP_BACKEND_URL}/api/cars/delete/${carId}`); // Suppression de la voiture
+      await axios.delete(`http://localhost:8002/api/cars/delete/${carId}`); // Suppression de la voiture
       await fetchCars(); // Rechargement des données après suppression
     } catch (error) {
       console.error('Error deleting car:', error); // Log en cas d'échec
@@ -54,7 +57,7 @@ const AdminCarPage = () => {
               {/* Image principale de la voiture */}
               {car.CarImages && car.CarImages.length > 0 ? (
                 <img
-                  src={`${process.env.REACT_APP_BACKEND_URL}${car.CarImages[0].imageURL}`}
+                  src={`http://localhost:8002${car.CarImages[0].imageURL}`}
                   className="card-img-top"
                   alt={`${car.brand} ${car.model}`}
                   style={{ width: '100%', height: 'auto' }}
@@ -88,100 +91,6 @@ const AdminCarPage = () => {
 };
 
 export default AdminCarPage; // Export du composant pour l'utiliser ailleurs
-
-
-
-
-// import React, { useEffect } from 'react'; // Importation de React et du hook useEffect
-// import { useDispatch, useSelector } from 'react-redux'; // Utilisation de Redux pour la gestion de l'état global
-// import axios from 'axios'; // Pour effectuer des requêtes HTTP
-// import { FETCH_SUCCESS, FETCH_FAILURE } from '../redux/reducers/sliceCar'; // Actions Redux pour les succès et échecs de requêtes
-
-// const AdminCarPage = () => {
-//   const dispatch = useDispatch(); // Hook Redux pour dispatcher des actions
-//   const cars = useSelector((state) => state.car.data); // Sélecteur pour récupérer les données des voitures
-//   const loading = useSelector((state) => state.car.loading); // Sélecteur pour l'état de chargement
-//   const error = useSelector((state) => state.car.error); // Sélecteur pour l'état d'erreur
-
-//   // Fonction pour récupérer les données des voitures depuis l'API
-//   const fetchCars = async () => {
-//     dispatch({ type: 'FETCH_CARS_LOADING' }); // Optionnel : met à jour l'état pour signaler le chargement
-//     try {
-//       const { data } = await axios.get('http://localhost:8002/api/cars/all'); // Récupération des voitures
-//       console.log('Fetched car data:', data); // Log pour débogage
-//       dispatch(FETCH_SUCCESS(data)); // Mise à jour des données dans Redux en cas de succès
-//     } catch (error) {
-//       console.error('Error fetching cars:', error); // Gestion de l'erreur
-//       dispatch(FETCH_FAILURE(error.message)); // Mise à jour de l'erreur dans Redux
-//     }
-//   };
-
-//   // Appel à l'API pour récupérer les données une fois que le composant est monté
-//   useEffect(() => {
-//     fetchCars();
-//   }, [dispatch]); // Dépendance sur `dispatch` pour s'assurer de l'exécution une seule fois
-
-//   // Fonction pour supprimer une voiture par son ID
-//   const handleDelete = async (carId) => {
-//     console.log(carId); // Log pour vérifier l'ID
-//     try {
-//       await axios.delete(`http://localhost:8002/api/cars/delete/${carId}`); // Suppression de la voiture
-//       await fetchCars(); // Rechargement des données après suppression
-//     } catch (error) {
-//       console.error('Error deleting car:', error); // Log en cas d'échec
-//     }
-//   };
-
-//   // Affiche un message pendant le chargement
-//   if (loading === 'loading') return <div>Loading...</div>;
-
-//   // Affiche un message en cas d'erreur
-//   if (error) return <div>Error: {error}</div>;
-
-//   return (
-//     <div className="container">
-//       {/* Liste des voitures */}
-//       <div className="row">
-//         {cars.map((car) => (
-//           <div key={car.id} className="col-md-4 mb-4">
-//             <div className="card" style={{ width: '18rem' }}>
-//               {/* Image principale de la voiture */}
-//               {car.CarImages && car.CarImages.length > 0 ? (
-//                 <img
-//                   src={`http://localhost:8002${car.CarImages[0].imageURL}`}
-//                   className="card-img-top"
-//                   alt={`${car.brand} ${car.model}`}
-//                   style={{ width: '100%', height: 'auto' }}
-//                 />
-//               ) : (
-//                 <img
-//                   src="/images/default.png"
-//                   className="card-img-top"
-//                   alt="Default"
-//                   style={{ width: '100%', height: 'auto' }}
-//                 />
-//               )}
-//               <div className="card-body">
-//                 {/* Détails de la voiture */}
-//                 <h5 className="card-title">{car.brand} {car.model}</h5>
-//                 <p className="card-text">Plaque: {car.registrationPlate}</p>
-//                 <p className="card-text">Année: {car.years}</p>
-//                 <p className="card-text">Prix/Jour: {car.pricePerDay}€</p>
-//                 <p className="card-text">Disponible: {car.available ? 'Oui' : 'Non'}</p>
-//                 {/* Bouton pour supprimer une voiture */}
-//                 <button className="btn btn-danger" onClick={() => handleDelete(car.id)}>
-//                   Supprimer
-//                 </button>
-//               </div>
-//             </div>
-//           </div>
-//         ))}
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default AdminCarPage; // Export du composant pour l'utiliser ailleurs
 
 
 // import React, { useEffect } from 'react'; // Importation de React et du hook useEffect
