@@ -1,6 +1,8 @@
+//src/components/AuthButton.js  VERSION TEST bouton déconnexion
 
 
-//src/components/AuthButton.js 
+
+//src/components/AuthButton.js  VERSION OK 
 
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';

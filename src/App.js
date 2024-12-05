@@ -22,6 +22,7 @@ import ResetPasswordPage from './pages/ResetPasswordPage';
 import BasketStripe from './pages/PageBasket/BasketStripe';
 
 
+
 //PAGES COMPONENTS 
 
 import BasketStripeCheckout from './pages/PageBasket/BasketStripe';
