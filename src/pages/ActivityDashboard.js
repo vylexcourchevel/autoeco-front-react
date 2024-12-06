@@ -15,7 +15,7 @@ const ActivityDashboard = () => {
     useEffect(() => {
         const fetchReservations = async () => {
             try {
-                const response = await axios.get('http://localhost:8002/api/reservations/all', {
+                const response = await axios.get(process.env.REACT_APP_BACKEND_URL+'/api/reservations/all', {
                     withCredentials: true, // Assurez-vous que les cookies sont envoyés avec la requête
                 });
                 setReservations(response.data); // Mise à jour de l'état avec les réservations récupérées
@@ -51,7 +51,7 @@ const ActivityDashboard = () => {
                             <div className="card" style={{ width: '100%' }}>
                                 <img
                                     src={reservation.Car && reservation.Car.CarImages && reservation.Car.CarImages.length > 0
-                                        ? `http://localhost:8002/${reservation.Car.CarImages[0].imageURL}`
+                                        ? process.env.REACT_APP_BACKEND_URL+`/${reservation.Car.CarImages[0].imageURL}`
                                         : "/images/default.png"
                                     }
                                     className="card-img-top"
@@ -112,7 +112,7 @@ export default ActivityDashboard;
 //         const fetchReservations = async () => {
 //             console.log('Attempting to fetch reservations...');
 //             try {
-//                 const response = await axios.get('http://localhost:8002/api/reservations/all', {
+//                 const response = await axios.get(process.env.REACT_APP_BACKEND_URL+'/api/reservations/all', {
 //                     withCredentials: true,
 //                 });
 //                 console.log('API Response:', response.data);
@@ -137,7 +137,7 @@ export default ActivityDashboard;
 //                                 <img
 //                                     src={
 //                                         reservation.Car && reservation.Car.CarImages && reservation.Car.CarImages.length > 0
-//                                             ? `http://localhost:8002/${reservation.Car.CarImages[0].imageURL}`
+//                                             ? process.env.REACT_APP_BACKEND_URL+`/${reservation.Car.CarImages[0].imageURL}`
 //                                             : "/images/default.png"
 //                                     }
 //                                     className="card-img-top"
@@ -201,7 +201,7 @@ export default ActivityDashboard;
 //         const fetchReservations = async () => {
 //             console.log('Attempting to fetch reservations...');
 //             try {
-//                 const response = await axios.get('http://localhost:8002/api/reservations/all', {
+//                 const response = await axios.get(process.env.REACT_APP_BACKEND_URL+'/api/reservations/all', {
 //                     withCredentials: true,
 //                 });
 //                 console.log('API Response:', response.data);
@@ -224,7 +224,7 @@ export default ActivityDashboard;
 //                         <img
 //                             src={
 //                                 reservation.Car && reservation.Car.CarImages && reservation.Car.CarImages.length > 0
-//                                     ? `http://localhost:8002/${reservation.Car.CarImages[0].imageURL}`
+//                                     ? process.env.REACT_APP_BACKEND_URL+`/${reservation.Car.CarImages[0].imageURL}`
 //                                     : "/images/default.png"
 //                             }
 //                             className="card-img-top"
@@ -285,7 +285,7 @@ export default ActivityDashboard;
 //         const fetchReservations = async () => {
 //             console.log('Attempting to fetch reservations...');
 //             try {
-//                 const response = await axios.get('http://localhost:8002/api/reservations/all', {
+//                 const response = await axios.get(process.env.REACT_APP_BACKEND_URL+'/api/reservations/all', {
 //                     withCredentials: true,
 //                 });
 //                 console.log('API Response:', response.data);
@@ -310,7 +310,7 @@ export default ActivityDashboard;
 //                                 <img
 //                                     src={
 //                                         reservation.Car && reservation.Car.CarImages && reservation.Car.CarImages.length > 0
-//                                             ? `http://localhost:8002/${reservation.Car.CarImages[0].imageURL}`
+//                                             ? process.env.REACT_APP_BACKEND_URL+`/${reservation.Car.CarImages[0].imageURL}`
 //                                             : "/images/default.png"
 //                                     }
 //                                     className="card-img"
@@ -375,7 +375,7 @@ export default ActivityDashboard;
 //         const fetchReservations = async () => {
 //             console.log('Attempting to fetch reservations...');
 //             try {
-//                 const response = await axios.get('http://localhost:8002/api/reservations/all', {
+//                 const response = await axios.get(process.env.REACT_APP_BACKEND_URL+'/api/reservations/all', {
 //                     withCredentials: true,
 //                 });
 //                 console.log('API Response:', response.data);
@@ -401,7 +401,7 @@ export default ActivityDashboard;
 //                                 {/* Vérification si `Car` existe et si `CarImages` est un tableau non vide */}
 //                                 {reservation.Car && reservation.Car.CarImages && reservation.Car.CarImages.length > 0 ? (
 //                                     <img
-//                                         src={`http://localhost:8002/${reservation.Car.CarImages[0].imageURL}`}
+//                                         src={process.env.REACT_APP_BACKEND_URL+`/${reservation.Car.CarImages[0].imageURL}`}
 //                                         alt={`${reservation.Car.brand} ${reservation.Car.model}`}
 //                                         style={{ width: '100%', height: 'auto' }}
 //                                     />
@@ -478,7 +478,7 @@ export default ActivityDashboard;
 //             // Affiche un message dans la console indiquant que la récupération des réservations est en cours.
 
 //             try {
-//                 const response = await axios.get('http://localhost:8002/api/reservations/all', {
+//                 const response = await axios.get(process.env.REACT_APP_BACKEND_URL+'/api/reservations/all', {
 //                     withCredentials: true,
 //                 });
 //                 // Effectue une requête GET asynchrone à l'API pour obtenir toutes les réservations.
@@ -526,7 +526,7 @@ export default ActivityDashboard;
                                 
 //                                 {reservation.Car.CarImages && reservation.Car.CarImages.length > 0 ? (
 //                                     <img
-//                                         src={`http://localhost:8002/${reservation.Car.CarImages[0].imageURL}`}
+//                                         src={process.env.REACT_APP_BACKEND_URL+`/${reservation.Car.CarImages[0].imageURL}`}
 //                                         alt={`${reservation.Car.brand} ${reservation.Car.model}`} // Texte alternatif pour l'image
 //                                         style={{ width: '100%', height: 'auto' }}
 //                                     />

@@ -35,7 +35,7 @@ const ResetPasswordPage = () => {
     console.log('Nouveau mot de passe :', newPassword);
 
     try {
-      const response = await axios.post(`http://localhost:8002/api/users/reset-password`, { token,newPassword });
+      const response = await axios.post(process.env.REACT_APP_BACKEND_URL+`/api/users/reset-password`, { token,newPassword });
 
       console.log('Réponse reçue du backend :', response.data);
       if (response.status === 200) {

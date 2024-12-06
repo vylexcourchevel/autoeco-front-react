@@ -38,7 +38,7 @@ const DefaultLayout = (props) => {
   const handleLogoutClick = async () => {
     try {
       // Requête API pour déconnecter l'utilisateur
-      await axios.post('http://localhost:8002/api/users/logout', {}, { withCredentials: true });
+      await axios.post(process.env.REACT_APP_BACKEND_URL+'/api/users/logout', {}, { withCredentials: true });
       dispatch(logout()); // Déclenchement de l'action Redux pour la déconnexion
       navigate('/'); // Redirection vers la page d'accueil
     } catch (error) {

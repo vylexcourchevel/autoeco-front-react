@@ -15,7 +15,7 @@ const StripeCheckout = ({ totalPrice, carId }) => {
 
     // Créez la session sur le backend
     try {
-      const response = await fetch('http://localhost:8002/api/stripe/create-checkout-session', {
+      const response = await fetch(process.env.REACT_APP_BACKEND_URL+'/api/stripe/create-checkout-session', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -84,7 +84,7 @@ export default StripeCheckout;
 
 //     // Créez la session sur le backend
 //     try {
-//       const response = await fetch('http://localhost:8002/create-checkout-session', {
+//       const response = await fetch(process.env.REACT_APP_BACKEND_URL+'/create-checkout-session', {
 //         method: 'POST',
 //         headers: {
 //           'Content-Type': 'application/json',

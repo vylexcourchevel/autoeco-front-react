@@ -16,7 +16,7 @@ const AdminCarPage = () => {
   const fetchCars = async () => {
     dispatch({ type: 'FETCH_CARS_LOADING' }); // Optionnel : met à jour l'état pour signaler le chargement
     try {
-      const { data } = await axios.get('http://localhost:8002/api/cars/all'); // Récupération des voitures
+      const { data } = await axios.get(process.env.REACT_APP_BACKEND_URL+'/api/cars/all'); // Récupération des voitures
       console.log('Fetched car data:', data); // Log pour débogage
       dispatch(FETCH_SUCCESS(data)); // Mise à jour des données dans Redux en cas de succès
     } catch (error) {
@@ -34,7 +34,7 @@ const AdminCarPage = () => {
   const handleDelete = async (carId) => {
     console.log(carId); // Log pour vérifier l'ID
     try {
-      await axios.delete(`http://localhost:8002/api/cars/delete/${carId}`); // Suppression de la voiture
+      await axios.delete(process.env.REACT_APP_BACKEND_URL+`/api/cars/delete/${carId}`); // Suppression de la voiture
       await fetchCars(); // Rechargement des données après suppression
     } catch (error) {
       console.error('Error deleting car:', error); // Log en cas d'échec
@@ -57,7 +57,7 @@ const AdminCarPage = () => {
               {/* Image principale de la voiture */}
               {car.CarImages && car.CarImages.length > 0 ? (
                 <img
-                  src={`http://localhost:8002${car.CarImages[0].imageURL}`}
+                  src={process.env.REACT_APP_BACKEND_URL+`${car.CarImages[0].imageURL}`}
                   className="card-img-top"
                   alt={`${car.brand} ${car.model}`}
                   style={{ width: '100%', height: 'auto' }}
@@ -108,7 +108,7 @@ export default AdminCarPage; // Export du composant pour l'utiliser ailleurs
 //   const fetchCars = async () => {
 //     dispatch({ type: 'FETCH_CARS_LOADING' }); // Peut être utilisé pour mettre à jour l'état de chargement si nécessaire
 //     try {
-//       const { data } = await axios.get('http://localhost:8002/api/cars/all'); // Requête pour récupérer les voitures depuis l'API
+//       const { data } = await axios.get(process.env.REACT_APP_BACKEND_URL+'/api/cars/all'); // Requête pour récupérer les voitures depuis l'API
 //       console.log('Fetched car data:', data); // Ajoutez ce log pour vérifier les données sélectionnées
 //       dispatch(FETCH_SUCCESS(data)); // Dispatch de l'action FETCH_SUCCESS avec les données récupérées
 //     } catch (error) {
@@ -123,7 +123,7 @@ export default AdminCarPage; // Export du composant pour l'utiliser ailleurs
 //   const handleDelete = async (carId) => {
 //     console.log(carId);
 //     try {
-//       await axios.delete(`http://localhost:8002/api/cars/delete/${carId}`); // Requête pour supprimer la voiture avec l'ID spécifié
+//       await axios.delete(process.env.REACT_APP_BACKEND_URL+`/api/cars/delete/${carId}`); // Requête pour supprimer la voiture avec l'ID spécifié
 //       // dispatch(DELETE_CAR(carId)); // Dispatch de l'action DELETE_CAR pour mettre à jour l'état dans Redux
 //       await fetchCars();
 //     } catch (error) {
@@ -133,7 +133,7 @@ export default AdminCarPage; // Export du composant pour l'utiliser ailleurs
 
 //   // const handleUpdate = async (carId, updatedCar) => {
 //   //   try {
-//   //     const { data } = await axios.put(`http://localhost:8002/api/cars/${carId}`, updatedCar); // Requête pour mettre à jour la voiture avec les nouvelles données
+//   //     const { data } = await axios.put(process.env.REACT_APP_BACKEND_URL+`/api/cars/${carId}`, updatedCar); // Requête pour mettre à jour la voiture avec les nouvelles données
 //   //     dispatch(UPDATE_CAR(data)); // Dispatch de l'action UPDATE_CAR pour mettre à jour l'état dans Redux avec les nouvelles données
 //   //   } catch (error) {
 //   //     console.error('Error updating car:', error); // Gestion des erreurs en cas d'échec de la requête
@@ -151,7 +151,7 @@ export default AdminCarPage; // Export du composant pour l'utiliser ailleurs
 //             <div className="card" style={{ width: '18rem' }}> {/* Carte pour afficher les détails de la voiture */}
 //               {car.CarImages && car.CarImages.length > 0 ? (
 //                 <img
-//                   src={`http://localhost:8002${car.CarImages[0].imageURL}`} // URL de l'image de la voiture
+//                   src={process.env.REACT_APP_BACKEND_URL+`${car.CarImages[0].imageURL}`} // URL de l'image de la voiture
               
 //                   className="card-img-top"
 //                   alt={`${car.brand} ${car.model}`} // Texte alternatif pour l'image

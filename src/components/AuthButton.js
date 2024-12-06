@@ -27,7 +27,7 @@ const DefaultLayout = (props) => {
 
   const handleLogoutClick = async () => {
     try {
-      await axios.post('http://localhost:8002/api/users/logout', {}, { withCredentials: true });
+      await axios.post(process.env.REACT_APP_BACKEND_URL+'/api/users/logout', {}, { withCredentials: true });
       dispatch(logout());
       navigate('/');
     } catch (error) {
@@ -147,7 +147,7 @@ export default DefaultLayout;
 //   const handleLogoutClick = async () => {
 //     try {
 //       // Envoi de la requête à l'API pour supprimer le cookie
-//       await axios.post('http://localhost:8002/api/users/logout', {}, { withCredentials: true });
+//       await axios.post(process.env.REACT_APP_BACKEND_URL+'/api/users/logout', {}, { withCredentials: true });
 
 //       // Dispatch de l'action de déconnexion
 //       dispatch(logout());
@@ -257,7 +257,7 @@ export default DefaultLayout;
 //   const handleLogoutClick = async () => {
 //     try {
 //       // Envoi de la requête à l'API pour supprimer le cookie
-//       await axios.post('http://localhost:8002/api/users/logout', {}, { withCredentials: true });
+//       await axios.post(process.env.REACT_APP_BACKEND_URL+'/api/users/logout', {}, { withCredentials: true });
 
 //       // Dispatch de l'action de déconnexion
 //       dispatch(logout());

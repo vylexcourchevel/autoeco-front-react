@@ -23,7 +23,7 @@ const AdminDashboard = () => {
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const response = await axios.get('http://localhost:8002/api/users/all', {
+                const response = await axios.get(process.env.REACT_APP_BACKEND_URL+'/api/users/all', {
                     withCredentials: true
                 });
                 if (response.status === 200) {
@@ -50,7 +50,7 @@ const AdminDashboard = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:8002/api/users/add', formData, {
+            const response = await axios.post(process.env.REACT_APP_BACKEND_URL+'/api/users/add', formData, {
                 withCredentials: true
             });
             alert('Utilisateur ajouté avec succès');
@@ -85,7 +85,7 @@ const AdminDashboard = () => {
     const handleUpdate = async (e) => {
         e.preventDefault();
         try {
-            await axios.put(`http://localhost:8002/api/users/update/${editingUserId}`, formData, {
+            await axios.put(process.env.REACT_APP_BACKEND_URL+`/api/users/update/${editingUserId}`, formData, {
                 withCredentials: true
             });
             alert('Utilisateur mis à jour avec succès');
@@ -108,7 +108,7 @@ const AdminDashboard = () => {
     const toggleAdminStatus = async (userId, currentStatus) => {
         try {
             const newStatus = !currentStatus;
-            await axios.post(`http://localhost:8002/api/users/admin/${userId}`, { isAdmin: newStatus }, {
+            await axios.post(process.env.REACT_APP_BACKEND_URL+`/api/users/admin/${userId}`, { isAdmin: newStatus }, {
                 withCredentials: true
             });
             setUsers(users.map(user =>
@@ -121,7 +121,7 @@ const AdminDashboard = () => {
 
     const deleteUser = async (userId) => {
         try {
-            await axios.delete(`http://localhost:8002/api/users/delete/${userId}`, {
+            await axios.delete(process.env.REACT_APP_BACKEND_URL+`/api/users/delete/${userId}`, {
                 withCredentials: true
             });
             setUsers(users.filter(user => user.id !== userId));
@@ -381,7 +381,7 @@ export default AdminDashboard;
 //     useEffect(() => {
 //         const fetchUsers = async () => {
 //             try {
-//                 const response = await axios.get('http://localhost:8002/api/users/all', {
+//                 const response = await axios.get(process.env.REACT_APP_BACKEND_URL+'/api/users/all', {
 //                     withCredentials: true
 //                 });
 //                 if (response.status === 200) {
@@ -408,7 +408,7 @@ export default AdminDashboard;
 //     const handleSubmit = async (e) => {
 //         e.preventDefault();
 //         try {
-//             const response = await axios.post('http://localhost:8002/api/users/add', formData, {
+//             const response = await axios.post(process.env.REACT_APP_BACKEND_URL+'/api/users/add', formData, {
 //                 withCredentials: true
 //             });
 //             alert('Utilisateur ajouté avec succès');
@@ -443,7 +443,7 @@ export default AdminDashboard;
 //     const handleUpdate = async (e) => {
 //         e.preventDefault();
 //         try {
-//             await axios.put(`http://localhost:8002/api/users/update/${editingUserId}`, formData, {
+//             await axios.put(process.env.REACT_APP_BACKEND_URL+`/api/users/update/${editingUserId}`, formData, {
 //                 withCredentials: true
 //             });
 //             alert('Utilisateur mis à jour avec succès');
@@ -466,7 +466,7 @@ export default AdminDashboard;
 //     const toggleAdminStatus = async (userId, currentStatus) => {
 //         try {
 //             const newStatus = !currentStatus;
-//             await axios.post(`http://localhost:8002/api/users/admin/${userId}`, { isAdmin: newStatus }, {
+//             await axios.post(process.env.REACT_APP_BACKEND_URL+`/api/users/admin/${userId}`, { isAdmin: newStatus }, {
 //                 withCredentials: true
 //             });
 //             setUsers(users.map(user =>
@@ -479,7 +479,7 @@ export default AdminDashboard;
 
 //     const deleteUser = async (userId) => {
 //         try {
-//             await axios.delete(`http://localhost:8002/api/users/delete/${userId}`, {
+//             await axios.delete(process.env.REACT_APP_BACKEND_URL+`/api/users/delete/${userId}`, {
 //                 withCredentials: true
 //             });
 //             setUsers(users.filter(user => user.id !== userId));

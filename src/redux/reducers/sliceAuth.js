@@ -15,7 +15,7 @@ const initialState = {
 
 // Création d'une fonction asynchrone pour récupérer l'utilisateur actuel depuis l'API
 export const getCurrentUser = createAsyncThunk('auth/getCurrent', async () => {
-    const response = await axios.get('http://localhost:8002/api/users/getCurrent', {
+    const response = await axios.get(process.env.REACT_APP_BACKEND_URL+'/api/users/getCurrent', {
         withCredentials: true // Inclure les cookies dans la requête
     });
 
@@ -96,7 +96,7 @@ export default sliceAuth.reducer;
 
 // // Création d'une fonction asynchrone pour récupérer l'utilisateur actuel depuis l'API
 // export const getCurrentUser = createAsyncThunk('auth/getCurrent', async () => {
-//     const response = await axios.get('http://localhost:8002/api/users/getCurrent', {
+//     const response = await axios.get(process.env.REACT_APP_BACKEND_URL+'/api/users/getCurrent', {
 //         withCredentials: true // Inclure les cookies dans la requête
 //     });
 
@@ -176,7 +176,7 @@ export default sliceAuth.reducer;
 // // Création d'une fonction asynchrone pour récupérer l'utilisateur actuel depuis l'API
 // export const getCurrentUser = createAsyncThunk('auth/getCurrent', async () => {
 //     // Envoi d'une requête GET à l'API pour obtenir l'utilisateur actuel
-//     const response = await axios.get('http://localhost:8002/api/users/getCurrent', {
+//     const response = await axios.get(process.env.REACT_APP_BACKEND_URL+'/api/users/getCurrent', {
 //         withCredentials: true // Inclure les cookies dans la requête
 //     });
 

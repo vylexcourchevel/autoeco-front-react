@@ -20,7 +20,7 @@ const Payment = () => {
   useEffect(() => {
     const fetchCar = async () => {
       try {
-        const response = await axios.get(`http://localhost:8002/api/cars/${carId}`);
+        const response = await axios.get(process.env.REACT_APP_BACKEND_URL+`/api/cars/${carId}`);
         setCar(response.data);
       } catch (error) {
         console.error('Error fetching car:', error);
@@ -43,7 +43,7 @@ const Payment = () => {
   }
 
   const imageURL = car.CarImages && car.CarImages.length > 0
-    ? `http://localhost:8002${car.CarImages[0].imageURL}`
+    ? process.env.REACT_APP_BACKEND_URL+`${car.CarImages[0].imageURL}`
     : '/images/default.png';
 
   const handleStripePayment = async () => {
@@ -51,7 +51,7 @@ const Payment = () => {
       try {
         // Créer une réservation avant le paiement
         const reservationResponse = await axios.post(
-          'http://localhost:8002/api/reservations/add',
+          process.env.REACT_APP_BACKEND_URL+'/api/reservations/add',
           {
             startDate,
             endDate,
@@ -62,7 +62,7 @@ const Payment = () => {
         );
         // Créer une session Stripe
         const stripeResponse = await axios.post(
-          'http://localhost:8002/api/stripe/create-checkout-session',
+          process.env.REACT_APP_BACKEND_URL+'/api/stripe/create-checkout-session',
           {
             carId: car.id,
             totalPrice,
@@ -150,7 +150,7 @@ export default Payment;
 //   useEffect(() => {
 //     const fetchCar = async () => {
 //       try {
-//         const response = await axios.get(`http://localhost:8002/api/cars/${carId}`);
+//         const response = await axios.get(process.env.REACT_APP_BACKEND_URL+`/api/cars/${carId}`);
 //         setCar(response.data);
 //       } catch (error) {
 //         console.error('Error fetching car:', error);
@@ -173,13 +173,13 @@ export default Payment;
 //   }
 
 //   const imageURL = car.CarImages && car.CarImages.length > 0
-//     ? `http://localhost:8002${car.CarImages[0].imageURL}`
+//     ? process.env.REACT_APP_BACKEND_URL+`${car.CarImages[0].imageURL}`
 //     : '/images/default.png';
 
 //   const handleSubmit = async () => {
 //     if (startDate && endDate && totalPrice !== null) {
 //       try {
-//         const response = await axios.post('http://localhost:8002/api/reservations/add', {
+//         const response = await axios.post(process.env.REACT_APP_BACKEND_URL+'/api/reservations/add', {
 //           startDate,
 //           endDate,
 //           totalPrice,

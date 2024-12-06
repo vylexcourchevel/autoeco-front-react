@@ -31,7 +31,7 @@ const AdminPage = () => {
   const fetchVehicles = async () => {
     console.log('Fetching vehicle data...');
     try {
-      const { data } = await axios.get("http://localhost:8002/api/cars/all", {
+      const { data } = await axios.get(process.env.REACT_APP_BACKEND_URL+"/api/cars/all", {
         withCredentials: true,
       });
       console.log('Fetched vehicle data:', data);
@@ -80,7 +80,7 @@ const AdminPage = () => {
     formData.append('image', formValues.file);
 
     try {
-      const response = await axios.post('http://localhost:8002/api/cars/add', formData);
+      const response = await axios.post(process.env.REACT_APP_BACKEND_URL+'/api/cars/add', formData);
       console.log(response.data);
       fetchVehicles();
       setFormValues({
@@ -100,7 +100,7 @@ const AdminPage = () => {
   const handleDelete = async (carId) => {
     console.log('Deleting vehicle with ID:', carId);
     try {
-      await axios.delete(`http://localhost:8002/api/cars/delete/${carId}`, {
+      await axios.delete(process.env.REACT_APP_BACKEND_URL+`/api/cars/delete/${carId}`, {
         withCredentials: true,
       });
       fetchVehicles();
@@ -125,7 +125,7 @@ const AdminPage = () => {
 
   try {
     const response = await axios.put(
-      `http://localhost:8002/api/cars/update/${selectedVehicle.id}`, 
+      process.env.REACT_APP_BACKEND_URL+`/api/cars/update/${selectedVehicle.id}`, 
       formData, 
       {
         withCredentials: true,  // Les cookies, y compris le token, sont envoyés automatiquement
@@ -440,7 +440,7 @@ const AdminPage = () => {
                 <div className="card h-100">
                   {vehicle.CarImages && vehicle.CarImages.length > 0 ? (
                     <img
-                      src={`http://localhost:8002${vehicle.CarImages[0].imageURL}`}
+                      src={process.env.REACT_APP_BACKEND_URL+`${vehicle.CarImages[0].imageURL}`}
                       className="card-img-top"
                       alt={`${vehicle.brand} ${vehicle.model}`}
                       style={{ width: '100%', height: 'auto' }}
@@ -516,7 +516,7 @@ export default AdminPage;
 //   const fetchVehicles = async () => {
 //     console.log('Fetching vehicle data...');
 //     try {
-//       const { data } = await axios.get("http://localhost:8002/api/cars/all", {
+//       const { data } = await axios.get(process.env.REACT_APP_BACKEND_URL+"/api/cars/all", {
 //         withCredentials: true,
 //       });
 //       console.log('Fetched vehicle data:', data);
@@ -565,7 +565,7 @@ export default AdminPage;
 //     formData.append('image', formValues.file);
 
 //     try {
-//       const response = await axios.post('http://localhost:8002/api/cars/add', formData);
+//       const response = await axios.post(process.env.REACT_APP_BACKEND_URL+'/api/cars/add', formData);
 //       console.log(response.data);
 //       fetchVehicles();
 //       setFormValues({
@@ -585,7 +585,7 @@ export default AdminPage;
 //   const handleDelete = async (carId) => {
 //     console.log('Deleting vehicle with ID:', carId);
 //     try {
-//       await axios.delete(`http://localhost:8002/api/cars/delete/${carId}`, {
+//       await axios.delete(process.env.REACT_APP_BACKEND_URL+`/api/cars/delete/${carId}`, {
 //         withCredentials: true,
 //       });
 //       fetchVehicles();
@@ -610,7 +610,7 @@ export default AdminPage;
 
 //   try {
 //     const response = await axios.put(
-//       `http://localhost:8002/api/cars/update/${selectedVehicle.id}`, 
+//       process.env.REACT_APP_BACKEND_URL+`/api/cars/update/${selectedVehicle.id}`, 
 //       formData, 
 //       {
 //         withCredentials: true,  // Les cookies, y compris le token, sont envoyés automatiquement
@@ -925,7 +925,7 @@ export default AdminPage;
 //                 <div className="card h-100">
 //                   {vehicle.CarImages && vehicle.CarImages.length > 0 ? (
 //                     <img
-//                       src={`http://localhost:8002${vehicle.CarImages[0].imageURL}`}
+//                       src={process.env.REACT_APP_BACKEND_URL+`${vehicle.CarImages[0].imageURL}`}
 //                       className="card-img-top"
 //                       alt={`${vehicle.brand} ${vehicle.model}`}
 //                       style={{ width: '100%', height: 'auto' }}
@@ -1001,7 +1001,7 @@ export default AdminPage;
 //   const fetchVehicles = async () => {
 //     console.log('Fetching vehicle data...');
 //     try {
-//       const { data } = await axios.get("http://localhost:8002/api/cars/all", {
+//       const { data } = await axios.get(process.env.REACT_APP_BACKEND_URL+"/api/cars/all", {
 //         withCredentials: true,
 //       });
 //       console.log('Fetched vehicle data:', data);
@@ -1050,7 +1050,7 @@ export default AdminPage;
 //     formData.append('image', formValues.file);
 
 //     try {
-//       const response = await axios.post('http://localhost:8002/api/cars/add', formData);
+//       const response = await axios.post(process.env.REACT_APP_BACKEND_URL+'/api/cars/add', formData);
 //       console.log(response.data);
 //       fetchVehicles();
 //       setFormValues({
@@ -1070,7 +1070,7 @@ export default AdminPage;
 //   const handleDelete = async (carId) => {
 //     console.log('Deleting vehicle with ID:', carId);
 //     try {
-//       await axios.delete(`http://localhost:8002/api/cars/delete/${carId}`, {
+//       await axios.delete(process.env.REACT_APP_BACKEND_URL+`/api/cars/delete/${carId}`, {
 //         withCredentials: true,
 //       });
 //       fetchVehicles();
@@ -1095,7 +1095,7 @@ export default AdminPage;
 
 //   try {
 //     const response = await axios.put(
-//       `http://localhost:8002/api/cars/update/${selectedVehicle.id}`, 
+//       process.env.REACT_APP_BACKEND_URL+`/api/cars/update/${selectedVehicle.id}`, 
 //       formData, 
 //       {
 //         withCredentials: true,  // Les cookies, y compris le token, sont envoyés automatiquement
@@ -1410,7 +1410,7 @@ export default AdminPage;
 //                 <div className="card h-100">
 //                   {vehicle.CarImages && vehicle.CarImages.length > 0 ? (
 //                     <img
-//                       src={`http://localhost:8002${vehicle.CarImages[0].imageURL}`}
+//                       src={process.env.REACT_APP_BACKEND_URL+`${vehicle.CarImages[0].imageURL}`}
 //                       className="card-img-top"
 //                       alt={`${vehicle.brand} ${vehicle.model}`}
 //                       style={{ width: '100%', height: 'auto' }}
@@ -1488,7 +1488,7 @@ export default AdminPage;
 //   const fetchVehicles = async () => {
 //     console.log('Fetching vehicle data...');
 //     try {
-//       const { data } = await axios.get("http://localhost:8002/api/cars/all", {
+//       const { data } = await axios.get(process.env.REACT_APP_BACKEND_URL+"/api/cars/all", {
 //         withCredentials: true,
 //       });
 //       console.log('Fetched vehicle data:', data);
@@ -1527,7 +1527,7 @@ export default AdminPage;
 //     formData.append('image', formValues.file);
 
 //     try {
-//       const response = await axios.post('http://localhost:8002/api/cars/add', formData);
+//       const response = await axios.post(process.env.REACT_APP_BACKEND_URL+'/api/cars/add', formData);
 //       console.log(response.data);
 //       fetchVehicles();
 //       setFormValues({
@@ -1547,7 +1547,7 @@ export default AdminPage;
 //   const handleDelete = async (carId) => {
 //     console.log('Deleting vehicle with ID:', carId);
 //     try {
-//       await axios.delete(`http://localhost:8002/api/cars/delete/${carId}`, {
+//       await axios.delete(process.env.REACT_APP_BACKEND_URL+`/api/cars/delete/${carId}`, {
 //         withCredentials: true,
 //       });
 //       fetchVehicles();
@@ -1578,7 +1578,7 @@ export default AdminPage;
 //     try {
  
     
-//       const response = await axios.put(`http://localhost:8002/api/cars/update/${selectedVehicle.id}`, formData,{
+//       const response = await axios.put(process.env.REACT_APP_BACKEND_URL+`/api/cars/update/${selectedVehicle.id}`, formData,{
 //         withCredentials: true,
 //     });
         
@@ -1887,7 +1887,7 @@ export default AdminPage;
 //                 <div className="card h-100">
 //                   {vehicle.CarImages && vehicle.CarImages.length > 0 ? (
 //                     <img
-//                       src={`http://localhost:8002${vehicle.CarImages[0].imageURL}`}
+//                       src={process.env.REACT_APP_BACKEND_URL+`${vehicle.CarImages[0].imageURL}`}
 //                       className="card-img-top"
 //                       alt={`${vehicle.brand} ${vehicle.model}`}
 //                       style={{ width: '100%', height: 'auto' }}
@@ -1961,7 +1961,7 @@ export default AdminPage;
 //   const fetchVehicles = async () => {
 //     console.log('Fetching vehicle data...');
 //     try {
-//       const { data } = await axios.get("http://localhost:8002/api/cars/all", {
+//       const { data } = await axios.get(process.env.REACT_APP_BACKEND_URL+"/api/cars/all", {
 //         withCredentials: true,
 //       });
 //       console.log('Fetched vehicle data:', data);
@@ -2000,7 +2000,7 @@ export default AdminPage;
 //     formData.append('image', formValues.file);
 
 //     try {
-//       const response = await axios.post('http://localhost:8002/api/cars/add', formData);
+//       const response = await axios.post(process.env.REACT_APP_BACKEND_URL+'/api/cars/add', formData);
 //       console.log(response.data);
 //       fetchVehicles();
 //       setFormValues({
@@ -2020,7 +2020,7 @@ export default AdminPage;
 //   const handleDelete = async (carId) => {
 //     console.log('Deleting vehicle with ID:', carId);
 //     try {
-//       await axios.delete(`http://localhost:8002/api/cars/delete/${carId}`, {
+//       await axios.delete(process.env.REACT_APP_BACKEND_URL+`/api/cars/delete/${carId}`, {
 //         withCredentials: true,
 //       });
 //       fetchVehicles();
@@ -2042,7 +2042,7 @@ export default AdminPage;
 //     formData.append('image', formValues.file);
 
 //     try {
-//       const response = await axios.put(`http://localhost:8002/api/cars/update/${selectedVehicle.id}`, formData,{
+//       const response = await axios.put(process.env.REACT_APP_BACKEND_URL+`/api/cars/update/${selectedVehicle.id}`, formData,{
 //         withCredentials: true,
 //     });
         
@@ -2351,7 +2351,7 @@ export default AdminPage;
 //                 <div className="card h-100">
 //                   {vehicle.CarImages && vehicle.CarImages.length > 0 ? (
 //                     <img
-//                       src={`http://localhost:8002${vehicle.CarImages[0].imageURL}`}
+//                       src={process.env.REACT_APP_BACKEND_URL+`${vehicle.CarImages[0].imageURL}`}
 //                       className="card-img-top"
 //                       alt={`${vehicle.brand} ${vehicle.model}`}
 //                       style={{ width: '100%', height: 'auto' }}

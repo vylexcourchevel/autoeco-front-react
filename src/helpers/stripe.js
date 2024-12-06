@@ -1,4 +1,4 @@
-const API = 'http://localhost:8002/api/stripe'
+const API = process.env.REACT_APP_BACKEND_URL+'/api/stripe'
 
 export async function  fetchFromApi(endpoint, options) {
    const {method, body} = {method: 'POST', body: null, ...options}

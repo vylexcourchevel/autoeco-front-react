@@ -34,7 +34,7 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:8002/api/users/login', formData, {
+            const response = await axios.post(process.env.REACT_APP_BACKEND_URL+'/api/users/login', formData, {
                 withCredentials: true
             });
 
@@ -66,7 +66,7 @@ const Login = () => {
     // Soumettre la demande de réinitialisation de mot de passe
     const handleForgotPasswordSubmit = async (email) => {
         try {
-            const response = await axios.post('http://localhost:8002/api/users/forgot-password', { email });
+            const response = await axios.post(process.env.REACT_APP_BACKEND_URL+'/api/users/forgot-password', { email });
             if (response.status === 200) {
                 setMessage('Un email avec les instructions de réinitialisation a été envoyé.');
                 setError('');
@@ -213,7 +213,7 @@ export default Login;
 //     const handleSubmit = async (e) => {
 //         e.preventDefault();
 //         try {
-//             const response = await axios.post('http://localhost:8002/api/users/login', formData, {
+//             const response = await axios.post(process.env.REACT_APP_BACKEND_URL+'/api/users/login', formData, {
 //                 withCredentials: true
 //             });
 
@@ -247,7 +247,7 @@ export default Login;
 
 //     const handleForgotPasswordSubmit = async (email) => {
 //         try {
-//             const response = await axios.post('http://localhost:8002/api/users/forgot-password', { email });
+//             const response = await axios.post(process.env.REACT_APP_BACKEND_URL+'/api/users/forgot-password', { email });
 //             if (response.status === 200) {
 //                 setMessage('Un email avec les instructions de réinitialisation a été envoyé.');
 //                 setError('');
@@ -388,7 +388,7 @@ export default Login;
 //     const handleSubmit = async (e) => {
 //         e.preventDefault();
 //         try {
-//             const response = await axios.post('http://localhost:8002/api/users/login', formData, {
+//             const response = await axios.post(process.env.REACT_APP_BACKEND_URL+'/api/users/login', formData, {
 //                 withCredentials: true
 //             });
 
@@ -504,7 +504,7 @@ export default Login;
 //     const handleSubmit = async (e) => {
 //         e.preventDefault();
 //         try {
-//             const response = await axios.post('http://localhost:8002/api/users/login', formData, {
+//             const response = await axios.post(process.env.REACT_APP_BACKEND_URL+'/api/users/login', formData, {
 //                 withCredentials: true
 //             });
 
@@ -617,7 +617,7 @@ export default Login;
 //     const handleSubmit = async (e) => {
 //         e.preventDefault();
 //         try {
-//             const response = await axios.post('http://localhost:8002/api/users/login', formData, {
+//             const response = await axios.post(process.env.REACT_APP_BACKEND_URL+'/api/users/login', formData, {
 //                 withCredentials: true
 //             });
 

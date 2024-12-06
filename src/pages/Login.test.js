@@ -63,7 +63,7 @@ describe('Login Component', () => {
         fireEvent.click(submitButton);
 
         // Vérifie que la requête axios a été appelée avec les bonnes données
-        expect(axios.post).toHaveBeenCalledWith('http://localhost:8002/api/users/login', {
+        expect(axios.post).toHaveBeenCalledWith(process.env.REACT_APP_BACKEND_URL+'/api/users/login', {
             email: 'test@example.com',
             password: 'password'
         });

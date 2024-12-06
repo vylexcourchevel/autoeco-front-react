@@ -16,7 +16,7 @@ const Home = () => {
   useEffect(() => {
     const fetchCar = async () => {
       try {
-        const { data } = await axios.get("http://localhost:8002/api/cars/all", {
+        const { data } = await axios.get(process.env.REACT_APP_BACKEND_URL+"/api/cars/all", {
           withCredentials: true
         });
         dispatch(FETCH_SUCCESS(data));
@@ -97,7 +97,7 @@ const Home = () => {
               <div className="card h-100 shadow-lg">
                 {car.CarImages && car.CarImages.length > 0 ? (
                   <img
-                    src={`http://localhost:8002${car.CarImages[0].imageURL}`}
+                    src={process.env.REACT_APP_BACKEND_URL+`${car.CarImages[0].imageURL}`}
                     className="card-img-top"
                     alt={`${car.brand} ${car.model}`}
                     style={{ width: '100%', height: '200px', objectFit: 'cover' }}
@@ -157,7 +157,7 @@ export default Home;
 //   useEffect(() => {
 //     const fetchCar = async () => {
 //       try {
-//         const { data } = await axios.get("http://localhost:8002/api/cars/all", {
+//         const { data } = await axios.get(process.env.REACT_APP_BACKEND_URL+"/api/cars/all", {
 //           withCredentials: true
 //         });
 //         dispatch(FETCH_SUCCESS(data));
@@ -233,7 +233,7 @@ export default Home;
 //               <div className="card h-100 shadow-lg">
 //                 {car.CarImages && car.CarImages.length > 0 ? (
 //                   <img
-//                     src={`http://localhost:8002${car.CarImages[0].imageURL}`}
+//                     src={process.env.REACT_APP_BACKEND_URL+`${car.CarImages[0].imageURL}`}
 //                     className="card-img-top"
 //                     alt={`${car.brand} ${car.model}`}
 //                     style={{ width: '100%', height: '200px', objectFit: 'cover' }}
@@ -293,7 +293,7 @@ export default Home;
 //   useEffect(() => {
 //     const fetchCar = async () => {
 //       try {
-//         const { data } = await axios.get("http://localhost:8002/api/cars/all", {
+//         const { data } = await axios.get(process.env.REACT_APP_BACKEND_URL+"/api/cars/all", {
 //           withCredentials: true
 //         });
 //         dispatch(FETCH_SUCCESS(data));
@@ -369,7 +369,7 @@ export default Home;
 //               <div className="card h-100 shadow-lg">
 //                 {car.CarImages && car.CarImages.length > 0 ? (
 //                   <img
-//                     src={`http://localhost:8002${car.CarImages[0].imageURL}`}
+//                     src={process.env.REACT_APP_BACKEND_URL+`${car.CarImages[0].imageURL}`}
 //                     className="card-img-top"
 //                     alt={`${car.brand} ${car.model}`}
 //                     style={{ width: '100%', height: '200px', objectFit: 'cover' }}
@@ -428,7 +428,7 @@ export default Home;
 //   useEffect(() => {
 //     const fetchCar = async () => {
 //       try {
-//         const { data } = await axios.get("http://localhost:8002/api/cars/all", {
+//         const { data } = await axios.get(process.env.REACT_APP_BACKEND_URL+"/api/cars/all", {
 //           withCredentials: true
 //         });
 //         dispatch(FETCH_SUCCESS(data));
@@ -499,7 +499,7 @@ export default Home;
 //               <div className="card h-100 shadow-lg">
 //                 {car.CarImages && car.CarImages.length > 0 ? (
 //                   <img
-//                     src={`http://localhost:8002${car.CarImages[0].imageURL}`}
+//                     src={process.env.REACT_APP_BACKEND_URL+`${car.CarImages[0].imageURL}`}
 //                     className="card-img-top"
 //                     alt={`${car.brand} ${car.model}`}
 //                     style={{ width: '100%', height: '200px', objectFit: 'cover' }}
@@ -557,7 +557,7 @@ export default Home;
 //   useEffect(() => {
 //     const fetchCar = async () => {
 //       try {
-//         const { data } = await axios.get("http://localhost:8002/api/cars/all", {
+//         const { data } = await axios.get(process.env.REACT_APP_BACKEND_URL+"/api/cars/all", {
 //           withCredentials: true
 //         });
 //         dispatch(FETCH_SUCCESS(data));
@@ -628,7 +628,7 @@ export default Home;
 //               <div className="card h-100 shadow-lg">
 //                 {car.CarImages && car.CarImages.length > 0 ? (
 //                   <img
-//                     src={`http://localhost:8002${car.CarImages[0].imageURL}`}
+//                     src={process.env.REACT_APP_BACKEND_URL+`${car.CarImages[0].imageURL}`}
 //                     className="card-img-top"
 //                     alt={`${car.brand} ${car.model}`}
 //                     style={{ width: '100%', height: '200px', objectFit: 'cover' }}
@@ -683,7 +683,7 @@ export default Home;
 //   useEffect(() => {
 //     const fetchCar = async () => {
 //       try {
-//         const { data } = await axios.get("http://localhost:8002/api/cars/all", {
+//         const { data } = await axios.get(process.env.REACT_APP_BACKEND_URL+"/api/cars/all", {
 //           withCredentials: true
 //         });
 //         dispatch(FETCH_SUCCESS(data));
@@ -738,7 +738,7 @@ export default Home;
 //               <div className="card h-100 shadow-sm">
 //                 {car.CarImages && car.CarImages.length > 0 ? (
 //                   <img
-//                     src={`http://localhost:8002${car.CarImages[0].imageURL}`}
+//                     src={process.env.REACT_APP_BACKEND_URL+`${car.CarImages[0].imageURL}`}
 //                     className="card-img-top"
 //                     alt={`${car.brand} ${car.model}`}
 //                     style={{ width: '100%', height: '200px', objectFit: 'cover' }}
@@ -796,7 +796,7 @@ export default Home;
 //     const fetchCar = async () => {
 //       console.log('Fetching car data...'); // Log avant de commencer la récupération des données
 //       try {
-//         const { data } = await axios.get("http://localhost:8002/api/cars/all", {
+//         const { data } = await axios.get(process.env.REACT_APP_BACKEND_URL+"/api/cars/all", {
 //           withCredentials: true // Inclure les cookies dans la requête
 //         });
 //         console.log('Fetched car data:', data); // Affichage des données des voitures dans la console
@@ -833,7 +833,7 @@ export default Home;
 //               <div className="card h-100">
 //                 {car.CarImages && car.CarImages.length > 0 ? (
 //                   <img
-//                     src={`http://localhost:8002${car.CarImages[0].imageURL}`}
+//                     src={process.env.REACT_APP_BACKEND_URL+`${car.CarImages[0].imageURL}`}
 //                     className="card-img-top"
 //                     alt={`${car.brand} ${car.model}`}
 //                     style={{ width: '100%', height: 'auto' }}

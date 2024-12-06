@@ -30,6 +30,7 @@ import Success from './components/stripe/success';
 import  Canceled from './components/stripe/canceled'; 
 
 function App() {
+  console.log(process.env.REACT_APP_BACKEND_URL)
   const dispatch = useDispatch();
 
   useEffect(() => {

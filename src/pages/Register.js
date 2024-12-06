@@ -29,7 +29,7 @@ const Register = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:8002/api/users/register', formData);
+            const response = await axios.post(process.env.REACT_APP_BACKEND_URL+'/api/users/register', formData);
             console.log('User registered successfully:', response.data);
             setShowConfirmation(true); // Afficher le message de confirmation
 
@@ -171,7 +171,7 @@ export default Register;
 //     const handleSubmit = async (e) => {
 //         e.preventDefault();
 //         try {
-//             const response = await axios.post('http://localhost:8002/api/users/register', formData);
+//             const response = await axios.post(process.env.REACT_APP_BACKEND_URL+'/api/users/register', formData);
 //             console.log('User registered successfully:', response.data);
 //             navigate('/');
 //         } catch (error) {
