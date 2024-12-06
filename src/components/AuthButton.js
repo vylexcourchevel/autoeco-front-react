@@ -1,8 +1,4 @@
-//src/components/AuthButton.js  VERSION TEST bouton déconnexion
-
-
-
-//src/components/AuthButton.js  VERSION OK 
+// src/components/AuthButton.js version ok 
 
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -10,10 +6,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../redux/reducers/sliceAuth';
 import axios from 'axios';
 
-// Définition du composant fonctionnel DefaultLayout
 const DefaultLayout = (props) => {
   const navigate = useNavigate();
-  const location = useLocation();  // Récupérer l'emplacement actuel
+  const location = useLocation();
   const dispatch = useDispatch();
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
@@ -30,16 +25,10 @@ const DefaultLayout = (props) => {
     color: 'white',
   };
 
-  // Fonction pour envoyer une requête à l'API pour supprimer le cookie
   const handleLogoutClick = async () => {
     try {
-      // Envoi de la requête à l'API pour supprimer le cookie
       await axios.post('http://localhost:8002/api/users/logout', {}, { withCredentials: true });
-
-      // Dispatch de l'action de déconnexion
       dispatch(logout());
-
-      // Redirection vers la page d'accueil
       navigate('/');
     } catch (error) {
       console.error('Erreur lors de la déconnexion :', error);
@@ -54,24 +43,40 @@ const DefaultLayout = (props) => {
     navigate('/register');
   };
 
+  const handleAdminRedirect = () => {
+    navigate('/admin');
+  };
+
   const AuthButton = () => {
-    // Vérifier si l'utilisateur est sur la page de connexion
     const isLoginPage = location.pathname === '/login';
+    const isAdminBoard = location.pathname === '/adminboard'; // Vérifie si la page actuelle est /adminboard
+
+    if (isAdminBoard) {
+      return (
+        <button
+          type="button"
+          className="btn btn-success btn-sm"
+          onClick={handleAdminRedirect}
+        >
+          Liste des véhicules
+        </button>
+      );
+    }
 
     return (
       <div>
         {!isAuthenticated && !isLoginPage ? (
           <>
-            <button 
-              type="button" 
+            <button
+              type="button"
               className="btn btn-primary btn-sm"
               onClick={handleLoginClick}
             >
               Connexion
             </button>
-            <button 
-              type="button" 
-              className="btn btn-secondary btn-sm" 
+            <button
+              type="button"
+              className="btn btn-secondary btn-sm"
               style={{ marginLeft: '10px' }}
               onClick={handleSignupClick}
             >
@@ -80,8 +85,8 @@ const DefaultLayout = (props) => {
           </>
         ) : (
           isAuthenticated && (
-            <button 
-              type="button" 
+            <button
+              type="button"
               className="btn btn-danger btn-sm"
               onClick={handleLogoutClick}
             >
@@ -107,6 +112,224 @@ const DefaultLayout = (props) => {
 };
 
 export default DefaultLayout;
+
+
+// // //src/components/AuthButton.js  VERSION TEST bouton déconnexion pour page payement
+
+
+// import React from 'react';
+// import { useNavigate, useLocation } from 'react-router-dom';
+// import { useSelector, useDispatch } from 'react-redux';
+// import { logout } from '../redux/reducers/sliceAuth';
+// import axios from 'axios';
+
+// // Définition du composant fonctionnel DefaultLayout
+// const DefaultLayout = (props) => {
+//   const navigate = useNavigate();
+//   const location = useLocation();  // Récupérer l'emplacement actuel
+//   const dispatch = useDispatch();
+//   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+
+//   const headerStyle = {
+//     backgroundColor: '#343a40',
+//     padding: '10px',
+//     display: 'flex',
+//     justifyContent: 'space-between',
+//     alignItems: 'center',
+//   };
+
+//   const titleStyle = {
+//     margin: 0,
+//     color: 'white',
+//   };
+
+//   // Fonction pour envoyer une requête à l'API pour supprimer le cookie
+//   const handleLogoutClick = async () => {
+//     try {
+//       // Envoi de la requête à l'API pour supprimer le cookie
+//       await axios.post('http://localhost:8002/api/users/logout', {}, { withCredentials: true });
+
+//       // Dispatch de l'action de déconnexion
+//       dispatch(logout());
+
+//       // Redirection vers la page d'accueil
+//       navigate('/');
+//     } catch (error) {
+//       console.error('Erreur lors de la déconnexion :', error);
+//     }
+//   };
+
+//   const handleLoginClick = () => {
+//     navigate('/login');
+//   };
+
+//   const handleSignupClick = () => {
+//     navigate('/register');
+//   };
+
+//   const AuthButton = () => {
+//     // Vérifier si l'utilisateur est sur la page de connexion
+//     const isLoginPage = location.pathname === '/login';
+
+//     return (
+//       <div>
+//         {!isAuthenticated && !isLoginPage ? (
+//           <>
+//             <button 
+//               type="button" 
+//               className="btn btn-primary btn-sm"
+//               onClick={handleLoginClick}
+//             >
+//               Connexion
+//             </button>
+//             <button 
+//               type="button" 
+//               className="btn btn-secondary btn-sm" 
+//               style={{ marginLeft: '10px' }}
+//               onClick={handleSignupClick}
+//             >
+//               Inscription
+//             </button>
+//           </>
+//         ) : (
+//           isAuthenticated && (
+//             <button 
+//               type="button" 
+//               className="btn btn-danger btn-sm"
+//               onClick={handleLogoutClick}
+//             >
+//               Déconnexion
+//             </button>
+//           )
+//         )}
+//       </div>
+//     );
+//   };
+
+//   return (
+//     <div>
+//       <div className="header" style={headerStyle}>
+//         <h1 style={titleStyle}>AUTOECO</h1>
+//         <AuthButton />
+//       </div>
+//       <div className="content">
+//         {props.children}
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default DefaultLayout;
+
+
+
+
+
+// //src/components/AuthButton.js  VERSION OK 
+
+// import React from 'react';
+// import { useNavigate, useLocation } from 'react-router-dom';
+// import { useSelector, useDispatch } from 'react-redux';
+// import { logout } from '../redux/reducers/sliceAuth';
+// import axios from 'axios';
+
+// // Définition du composant fonctionnel DefaultLayout
+// const DefaultLayout = (props) => {
+//   const navigate = useNavigate();
+//   const location = useLocation();  // Récupérer l'emplacement actuel
+//   const dispatch = useDispatch();
+//   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+
+//   const headerStyle = {
+//     backgroundColor: '#343a40',
+//     padding: '10px',
+//     display: 'flex',
+//     justifyContent: 'space-between',
+//     alignItems: 'center',
+//   };
+
+//   const titleStyle = {
+//     margin: 0,
+//     color: 'white',
+//   };
+
+//   // Fonction pour envoyer une requête à l'API pour supprimer le cookie
+//   const handleLogoutClick = async () => {
+//     try {
+//       // Envoi de la requête à l'API pour supprimer le cookie
+//       await axios.post('http://localhost:8002/api/users/logout', {}, { withCredentials: true });
+
+//       // Dispatch de l'action de déconnexion
+//       dispatch(logout());
+
+//       // Redirection vers la page d'accueil
+//       navigate('/');
+//     } catch (error) {
+//       console.error('Erreur lors de la déconnexion :', error);
+//     }
+//   };
+
+//   const handleLoginClick = () => {
+//     navigate('/login');
+//   };
+
+//   const handleSignupClick = () => {
+//     navigate('/register');
+//   };
+
+//   const AuthButton = () => {
+//     // Vérifier si l'utilisateur est sur la page de connexion
+//     const isLoginPage = location.pathname === '/login';
+
+//     return (
+//       <div>
+//         {!isAuthenticated && !isLoginPage ? (
+//           <>
+//             <button 
+//               type="button" 
+//               className="btn btn-primary btn-sm"
+//               onClick={handleLoginClick}
+//             >
+//               Connexion
+//             </button>
+//             <button 
+//               type="button" 
+//               className="btn btn-secondary btn-sm" 
+//               style={{ marginLeft: '10px' }}
+//               onClick={handleSignupClick}
+//             >
+//               Inscription
+//             </button>
+//           </>
+//         ) : (
+//           isAuthenticated && (
+//             <button 
+//               type="button" 
+//               className="btn btn-danger btn-sm"
+//               onClick={handleLogoutClick}
+//             >
+//               Déconnexion
+//             </button>
+//           )
+//         )}
+//       </div>
+//     );
+//   };
+
+//   return (
+//     <div>
+//       <div className="header" style={headerStyle}>
+//         <h1 style={titleStyle}>AUTOECO</h1>
+//         <AuthButton />
+//       </div>
+//       <div className="content">
+//         {props.children}
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default DefaultLayout;
 
 
 

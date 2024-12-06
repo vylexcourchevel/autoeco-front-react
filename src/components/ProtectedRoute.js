@@ -1,6 +1,7 @@
 
 
-// src/components/ProtectedRoute.js
+
+// src/components/ProtectedRoute.js VERSION OK 
 
 import React from 'react';
 import { Navigate } from 'react-router-dom';

@@ -1,6 +1,6 @@
 
 
-// src/components/DefaultLayout.js rectification duu bouton ajout "liste des véhicules"
+// src/components/DefaultLayout.js rectification duu bouton ajout "liste des véhicules"  version ok
 
 // Importation des dépendances React et autres bibliothèques
 import React from 'react'; 
