@@ -1,117 +1,778 @@
-// src/components/AuthButton.js version ok 
-
 import React from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import { logout } from '../redux/reducers/sliceAuth';
-import axios from 'axios';
+import { useNavigate, useLocation } from 'react-router-dom'; // Pour gérer la navigation et récupérer l'emplacement actuel
+import { useSelector, useDispatch } from 'react-redux'; // Pour interagir avec l'état global via Redux
+import { logout } from '../redux/reducers/sliceAuth'; // Action de déconnexion Redux
+import axios from 'axios'; // Pour effectuer des requêtes HTTP
 
-const DefaultLayout = (props) => {
+const AuthButton = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
-  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
-  const headerStyle = {
-    backgroundColor: '#343a40',
-    padding: '10px',
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  };
+  // Récupération des informations d'authentification et d'administration dans le state Redux
+  const { isAuthenticated, isAdmin } = useSelector((state) => state.auth);
 
-  const titleStyle = {
-    margin: 0,
-    color: 'white',
-  };
-
+  // Fonction appelée lors du clic sur le bouton de déconnexion
   const handleLogoutClick = async () => {
     try {
-      await axios.post(process.env.REACT_APP_BACKEND_URL+'/api/users/logout', {}, { withCredentials: true });
-      dispatch(logout());
-      navigate('/');
+      await axios.post(
+        process.env.REACT_APP_BACKEND_URL + '/api/users/logout',
+        {},
+        { withCredentials: true }
+      );
+      dispatch(logout()); // Déconnexion de l'utilisateur dans Redux
+      navigate('/'); // Redirige vers la page d'accueil après déconnexion
     } catch (error) {
       console.error('Erreur lors de la déconnexion :', error);
     }
   };
 
-  const handleLoginClick = () => {
-    navigate('/login');
-  };
+  // Fonctions pour naviguer vers différentes pages
+  const handleLoginClick = () => navigate('/login');
+  const handleSignupClick = () => navigate('/register'); // Redirection vers la page /register
 
-  const handleSignupClick = () => {
-    navigate('/register');
-  };
-
-  const handleAdminRedirect = () => {
-    navigate('/admin');
-  };
-
-  const AuthButton = () => {
-    const isLoginPage = location.pathname === '/login';
-    const isAdminBoard = location.pathname === '/adminboard'; // Vérifie si la page actuelle est /adminboard
-
-    if (isAdminBoard) {
-      return (
-        <button
-          type="button"
-          className="btn btn-success btn-sm"
-          onClick={handleAdminRedirect}
-        >
-          Liste des véhicules
-        </button>
-      );
-    }
-
-    return (
-      <div>
-        {!isAuthenticated && !isLoginPage ? (
-          <>
-            <button
-              type="button"
-              className="btn btn-primary btn-sm"
-              onClick={handleLoginClick}
-            >
-              Connexion
-            </button>
-            <button
-              type="button"
-              className="btn btn-secondary btn-sm"
-              style={{ marginLeft: '10px' }}
-              onClick={handleSignupClick}
-            >
-              Inscription
-            </button>
-          </>
-        ) : (
-          isAuthenticated && (
-            <button
-              type="button"
-              className="btn btn-danger btn-sm"
-              onClick={handleLogoutClick}
-            >
-              Déconnexion
-            </button>
-          )
-        )}
-      </div>
-    );
-  };
+  // Vérification si l'utilisateur est sur la page de login
+  const isLoginPage = location.pathname === '/login';
 
   return (
     <div>
-      <div className="header" style={headerStyle}>
-        <h1 style={titleStyle}>AUTOECO</h1>
-        <AuthButton />
-      </div>
-      <div className="content">
-        {props.children}
-      </div>
+      {/* Bouton de déconnexion affiché uniquement sur la page /login */}
+      {isLoginPage && (
+        <button type="button" className="btn btn-danger btn-sm" onClick={handleLogoutClick}>
+          Déconnexion
+        </button>
+      )}
+
+      {/* Si l'utilisateur n'est pas connecté et n'est pas sur la page de login */}
+      {!isAuthenticated && !isLoginPage && (
+        <>
+          <button type="button" className="btn btn-primary btn-sm" onClick={handleLoginClick}>
+            Connexion
+          </button>
+          <button type="button" className="btn btn-secondary btn-sm" style={{ marginLeft: '10px' }} onClick={handleSignupClick}>
+            Inscription
+          </button>
+        </>
+      )}
+
+      {/* Si l'utilisateur est connecté */}
+      {isAuthenticated && !isLoginPage && (
+        <div>
+          {/* Si l'utilisateur est un administrateur */}
+          {isAdmin && (
+            <>
+              <button type="button" className="btn btn-primary btn-sm" onClick={() => navigate('/admin')}>
+                Liste des véhicules
+              </button>
+              <button type="button" className="btn btn-warning btn-sm" style={{ marginLeft: '10px' }} onClick={() => navigate('/adminboard')}>
+                Tableau de bord
+              </button>
+              <button type="button" className="btn btn-info btn-sm" style={{ marginLeft: '10px' }} onClick={() => navigate('/activity')}>
+                Activité
+              </button>
+            </>
+          )}
+
+          {/* Bouton de déconnexion pour les utilisateurs authentifiés */}
+          <button type="button" className="btn btn-danger btn-sm" style={{ marginLeft: '10px' }} onClick={handleLogoutClick}>
+            Déconnexion
+          </button>
+        </div>
+      )}
     </div>
   );
 };
 
-export default DefaultLayout;
+export default AuthButton;
+
+
+
+// import React from 'react';
+// import { useNavigate, useLocation } from 'react-router-dom'; // Pour gérer la navigation et récupérer l'emplacement actuel
+// import { useSelector, useDispatch } from 'react-redux'; // Pour interagir avec l'état global via Redux
+// import { logout } from '../redux/reducers/sliceAuth'; // Action de déconnexion Redux
+// import axios from 'axios'; // Pour effectuer des requêtes HTTP
+
+// const AuthButton = () => {
+//   const navigate = useNavigate();
+//   const location = useLocation();
+//   const dispatch = useDispatch();
+
+//   // Récupération des informations d'authentification et d'administration dans le state Redux
+//   const { isAuthenticated, isAdmin } = useSelector((state) => state.auth);
+
+//   // Fonction appelée lors du clic sur le bouton de déconnexion
+//   const handleLogoutClick = async () => {
+//     try {
+//       await axios.post(
+//         process.env.REACT_APP_BACKEND_URL + '/api/users/logout',
+//         {},
+//         { withCredentials: true }
+//       );
+//       dispatch(logout()); // Déconnexion de l'utilisateur dans Redux
+//       navigate('/'); // Redirige vers la page d'accueil après déconnexion
+//     } catch (error) {
+//       console.error('Erreur lors de la déconnexion :', error);
+//     }
+//   };
+
+//   // Fonctions pour naviguer vers différentes pages
+//   const handleLoginClick = () => navigate('/login');
+//   const handleSignupClick = () => navigate('/register'); // Redirection vers la page /register
+
+//   // Vérification si l'utilisateur est sur la page de login
+//   const isLoginPage = location.pathname === '/login';
+
+//   return (
+//     <div>
+//       {/* Bouton de déconnexion affiché uniquement sur la page /login */}
+//       {isLoginPage && (
+//         <button type="button" className="btn btn-danger btn-sm" onClick={handleLogoutClick}>
+//           Déconnexion
+//         </button>
+//       )}
+
+//       {/* Si l'utilisateur n'est pas connecté et n'est pas sur la page de login */}
+//       {!isAuthenticated && !isLoginPage && (
+//         <>
+//           <button type="button" className="btn btn-primary btn-sm" onClick={handleLoginClick}>
+//             Connexion
+//           </button>
+//           <button type="button" className="btn btn-secondary btn-sm" style={{ marginLeft: '10px' }} onClick={handleSignupClick}>
+//             Inscription
+//           </button>
+//         </>
+//       )}
+
+//       {/* Si l'utilisateur est connecté */}
+//       {isAuthenticated && !isLoginPage && (
+//         <div>
+//           {/* Si l'utilisateur est un administrateur */}
+//           {isAdmin && (
+//             <>
+//               <button type="button" className="btn btn-primary btn-sm" onClick={() => navigate('/admin')}>
+//                 Liste des véhicules
+//               </button>
+//               <button type="button" className="btn btn-warning btn-sm" style={{ marginLeft: '10px' }} onClick={() => navigate('/adminboard')}>
+//                 Tableau de bord
+//               </button>
+//               <button type="button" className="btn btn-info btn-sm" style={{ marginLeft: '10px' }} onClick={() => navigate('/activity')}>
+//                 Activité
+//               </button>
+//             </>
+//           )}
+
+//           {/* Bouton de déconnexion pour les utilisateurs authentifiés */}
+//           <button type="button" className="btn btn-danger btn-sm" style={{ marginLeft: '10px' }} onClick={handleLogoutClick}>
+//             Déconnexion
+//           </button>
+//         </div>
+//       )}
+//     </div>
+//   );
+// };
+
+// export default AuthButton;
+
+
+// import React from 'react';
+// import { useNavigate, useLocation } from 'react-router-dom'; // Pour gérer la navigation et récupérer l'emplacement actuel
+// import { useSelector, useDispatch } from 'react-redux'; // Pour interagir avec l'état global via Redux
+// import { logout } from '../redux/reducers/sliceAuth'; // Action de déconnexion Redux
+// import axios from 'axios'; // Pour effectuer des requêtes HTTP
+
+// const AuthButton = () => {
+//   const navigate = useNavigate();
+//   const location = useLocation();
+//   const dispatch = useDispatch();
+
+//   // Récupération des informations d'authentification et d'administration dans le state Redux
+//   const { isAuthenticated, isAdmin } = useSelector((state) => state.auth);
+
+//   // Fonction appelée lors du clic sur le bouton de déconnexion
+//   const handleLogoutClick = async () => {
+//     try {
+//       await axios.post(
+//         process.env.REACT_APP_BACKEND_URL + '/api/users/logout',
+//         {},
+//         { withCredentials: true }
+//       );
+//       dispatch(logout()); // Déconnexion de l'utilisateur dans Redux
+//       navigate('/'); // Redirige vers la page d'accueil après déconnexion
+//     } catch (error) {
+//       console.error('Erreur lors de la déconnexion :', error);
+//     }
+//   };
+
+//   // Fonctions pour naviguer vers différentes pages
+//   const handleLoginClick = () => navigate('/login');
+//   const handleSignupClick = () => navigate('/register');
+
+//   // Vérification si l'utilisateur est sur la page de login
+//   const isLoginPage = location.pathname === '/login';
+
+//   return (
+//     <div>
+//       {/* Bouton de déconnexion affiché uniquement sur la page /login */}
+//       {isLoginPage && (
+//         <button type="button" className="btn btn-danger btn-sm" onClick={handleLogoutClick}>
+//           Déconnexion
+//         </button>
+//       )}
+
+//       {/* Si l'utilisateur n'est pas connecté et n'est pas sur la page de login */}
+//       {!isAuthenticated && !isLoginPage && (
+//         <>
+//           <button type="button" className="btn btn-primary btn-sm" onClick={handleLoginClick}>
+//             Connexion
+//           </button>
+//           <button type="button" className="btn btn-secondary btn-sm" style={{ marginLeft: '10px' }} onClick={handleSignupClick}>
+//             Inscription
+//           </button>
+//         </>
+//       )}
+
+//       {/* Si l'utilisateur est connecté */}
+//       {isAuthenticated && !isLoginPage && (
+//         <div>
+//           {/* Si l'utilisateur est un administrateur */}
+//           {isAdmin && (
+//             <>
+//               <button type="button" className="btn btn-primary btn-sm" onClick={() => navigate('/admin')}>
+//                 Liste des véhicules
+//               </button>
+//               <button type="button" className="btn btn-warning btn-sm" style={{ marginLeft: '10px' }} onClick={() => navigate('/adminboard')}>
+//                 Tableau de bord
+//               </button>
+//               <button type="button" className="btn btn-info btn-sm" style={{ marginLeft: '10px' }} onClick={() => navigate('/activity')}>
+//                 Activité
+//               </button>
+//             </>
+//           )}
+
+//           {/* Bouton de déconnexion pour les utilisateurs authentifiés */}
+//           <button type="button" className="btn btn-danger btn-sm" style={{ marginLeft: '10px' }} onClick={handleLogoutClick}>
+//             Déconnexion
+//           </button>
+//         </div>
+//       )}
+//     </div>
+//   );
+// };
+
+// export default AuthButton;
+
+
+// import React from 'react';
+// import { useNavigate, useLocation } from 'react-router-dom'; // Pour gérer la navigation et récupérer l'emplacement actuel
+// import { useSelector, useDispatch } from 'react-redux'; // Pour interagir avec l'état global via Redux
+// import { logout } from '../redux/reducers/sliceAuth'; // Action de déconnexion Redux
+// import axios from 'axios'; // Pour effectuer des requêtes HTTP
+
+// const AuthButton = () => {
+//   const navigate = useNavigate();
+//   const location = useLocation();
+//   const dispatch = useDispatch();
+
+//   // Récupération des informations d'authentification et d'administration dans le state Redux
+//   const { isAuthenticated, isAdmin } = useSelector((state) => state.auth);
+
+//   // Fonction appelée lors du clic sur le bouton de déconnexion
+//   const handleLogoutClick = async () => {
+//     try {
+//       await axios.post(
+//         process.env.REACT_APP_BACKEND_URL + '/api/users/logout',
+//         {},
+//         { withCredentials: true }
+//       );
+//       dispatch(logout()); // Déconnexion de l'utilisateur dans Redux
+//       navigate('/'); // Redirige vers la page d'accueil après déconnexion
+//     } catch (error) {
+//       console.error('Erreur lors de la déconnexion :', error);
+//     }
+//   };
+
+//   return (
+//     <div>
+//       {/* Bouton de déconnexion toujours affiché dans le header */}
+//       <button type="button" className="btn btn-danger btn-sm" onClick={handleLogoutClick}>
+//         Déconnexion
+//       </button>
+
+//       {/* Affiche d'autres boutons si l'utilisateur est authentifié */}
+//       {isAuthenticated && (
+//         <div>
+//           {isAdmin && (
+//             <>
+//               <button type="button" className="btn btn-primary btn-sm" onClick={() => navigate('/admin')}>
+//                 Liste des véhicules
+//               </button>
+//               <button type="button" className="btn btn-warning btn-sm" style={{ marginLeft: '10px' }} onClick={() => navigate('/adminboard')}>
+//                 Tableau de bord
+//               </button>
+//               <button type="button" className="btn btn-info btn-sm" style={{ marginLeft: '10px' }} onClick={() => navigate('/activity')}>
+//                 Activité
+//               </button>
+//             </>
+//           )}
+//         </div>
+//       )}
+//     </div>
+//   );
+// };
+
+// export default AuthButton;
+
+
+
+// import React from 'react';
+// import { useNavigate, useLocation } from 'react-router-dom'; // Pour gérer la navigation et récupérer l'emplacement actuel
+// import { useSelector, useDispatch } from 'react-redux'; // Pour interagir avec l'état global via Redux
+// import { logout } from '../redux/reducers/sliceAuth'; // Action de déconnexion Redux
+// import axios from 'axios'; // Pour effectuer des requêtes HTTP
+
+// const AuthButton = () => {
+//   const navigate = useNavigate();
+//   const location = useLocation();
+//   const dispatch = useDispatch();
+
+//   // Récupération des informations d'authentification et d'administration dans le state Redux
+//   const { isAuthenticated, isAdmin } = useSelector((state) => state.auth);
+
+//   // Fonction appelée lors du clic sur le bouton de déconnexion
+//   const handleLogoutClick = async () => {
+//     try {
+//       await axios.post(
+//         process.env.REACT_APP_BACKEND_URL + '/api/users/logout',
+//         {},
+//         { withCredentials: true }
+//       );
+//       dispatch(logout()); // Déconnexion de l'utilisateur dans Redux
+//       navigate('/login'); // Redirige vers la page de login après déconnexion
+//     } catch (error) {
+//       console.error('Erreur lors de la déconnexion :', error);
+//     }
+//   };
+
+//   // Fonctions pour naviguer vers différentes pages
+//   const handleLoginClick = () => navigate('/login');
+//   const handleSignupClick = () => navigate('/register');
+
+//   // Vérification des différentes pages où l'on doit afficher certains boutons
+//   const isLoginPage = location.pathname === '/login';
+
+//   return (
+//     <div>
+//       {/* Si l'utilisateur n'est pas connecté et n'est pas sur la page de login */}
+//       {!isAuthenticated && !isLoginPage && (
+//         <>
+//           <button type="button" className="btn btn-primary btn-sm" onClick={handleLoginClick}>Connexion</button>
+//           <button type="button" className="btn btn-secondary btn-sm" style={{ marginLeft: '10px' }} onClick={handleSignupClick}>Inscription</button>
+//         </>
+//       )}
+
+//       {/* Si l'utilisateur est connecté */}
+//       {isAuthenticated && (
+//         <div>
+//           {/* Si l'utilisateur est un administrateur */}
+//           {isAdmin && (
+//             <>
+//               <button type="button" className="btn btn-primary btn-sm" onClick={() => navigate('/admin')}>Liste des véhicules</button>
+//               <button type="button" className="btn btn-warning btn-sm" style={{ marginLeft: '10px' }} onClick={() => navigate('/adminboard')}>Tableau de bord</button>
+//               <button type="button" className="btn btn-info btn-sm" style={{ marginLeft: '10px' }} onClick={() => navigate('/activity')}>Activité</button>
+//             </>
+//           )}
+
+//           {/* Bouton de déconnexion */}
+//           <button type="button" className="btn btn-danger btn-sm" style={{ marginLeft: '10px' }} onClick={handleLogoutClick}>Déconnexion</button>
+//         </div>
+//       )}
+//     </div>
+//   );
+// };
+
+// export default AuthButton;
+
+
+// import React from 'react';
+// import { useNavigate, useLocation } from 'react-router-dom'; // Pour gérer la navigation et récupérer l'emplacement actuel
+// import { useSelector, useDispatch } from 'react-redux'; // Pour interagir avec l'état global via Redux
+// import { logout } from '../redux/reducers/sliceAuth'; // Action de déconnexion Redux
+// import axios from 'axios'; // Pour effectuer des requêtes HTTP
+
+// const AuthButton = () => {
+//   const navigate = useNavigate();
+//   const location = useLocation();
+//   const dispatch = useDispatch();
+
+//   // Récupération des informations d'authentification et d'administration dans le state Redux
+//   const { isAuthenticated, isAdmin } = useSelector((state) => state.auth);
+
+//   // Fonction appelée lors du clic sur le bouton de déconnexion
+//   const handleLogoutClick = async () => {
+//     try {
+//       await axios.post(
+//         process.env.REACT_APP_BACKEND_URL + '/api/users/logout',
+//         {},
+//         { withCredentials: true }
+//       );
+//       dispatch(logout()); // Déconnexion de l'utilisateur dans Redux
+//       navigate('/login'); // Redirige vers la page de login après déconnexion
+//     } catch (error) {
+//       console.error('Erreur lors de la déconnexion :', error);
+//     }
+//   };
+
+//   // Fonctions pour naviguer vers différentes pages
+//   const handleLoginClick = () => navigate('/login');
+//   const handleSignupClick = () => navigate('/register');
+
+//   // Vérification des différentes pages où l'on doit afficher certains boutons
+//   const isLoginPage = location.pathname === '/login';
+
+//   return (
+//     <div>
+//       {/* Si l'utilisateur n'est pas connecté et n'est pas sur la page de login */}
+//       {!isAuthenticated && !isLoginPage && (
+//         <>
+//           <button type="button" className="btn btn-primary btn-sm" onClick={handleLoginClick}>Connexion</button>
+//           <button type="button" className="btn btn-secondary btn-sm" style={{ marginLeft: '10px' }} onClick={handleSignupClick}>Inscription</button>
+//         </>
+//       )}
+
+//       {/* Si l'utilisateur est connecté */}
+//       {isAuthenticated && (
+//         <div>
+//           {/* Si l'utilisateur est un administrateur */}
+//           {isAdmin && (
+//             <>
+//               <button type="button" className="btn btn-primary btn-sm" onClick={() => navigate('/admin')}>Liste des véhicules</button>
+//               <button type="button" className="btn btn-warning btn-sm" style={{ marginLeft: '10px' }} onClick={() => navigate('/adminboard')}>Tableau de bord</button>
+//               <button type="button" className="btn btn-info btn-sm" style={{ marginLeft: '10px' }} onClick={() => navigate('/activity')}>Activité</button>
+//             </>
+//           )}
+
+//           {/* Bouton de déconnexion */}
+//           <button type="button" className="btn btn-danger btn-sm" style={{ marginLeft: '10px' }} onClick={handleLogoutClick}>Déconnexion</button>
+//         </div>
+//       )}
+//     </div>
+//   );
+// };
+
+// export default AuthButton;
+
+
+// // src/components/AuthButton.js
+// import React from 'react';
+// import { useNavigate, useLocation } from 'react-router-dom'; // Pour gérer la navigation et récupérer l'emplacement actuel
+// import { useSelector, useDispatch } from 'react-redux'; // Pour interagir avec l'état global via Redux
+// import { logout } from '../redux/reducers/sliceAuth'; // Action de déconnexion Redux
+// import axios from 'axios'; // Pour effectuer des requêtes HTTP
+
+// const AuthButton = () => {
+//   const navigate = useNavigate();
+//   const location = useLocation();
+//   const dispatch = useDispatch();
+
+//   // Récupération des informations d'authentification et d'administration dans le state Redux
+//   const { isAuthenticated, isAdmin } = useSelector((state) => state.auth);
+
+//   // Fonction appelée lors du clic sur le bouton de déconnexion
+//   const handleLogoutClick = async () => {
+//     try {
+//       await axios.post(
+//         process.env.REACT_APP_BACKEND_URL + '/api/users/logout',
+//         {},
+//         { withCredentials: true }
+//       );
+//       dispatch(logout());
+//       navigate('/');
+//     } catch (error) {
+//       console.error('Erreur lors de la déconnexion :', error);
+//     }
+//   };
+
+//   // Fonctions pour naviguer vers différentes pages
+//   const handleLoginClick = () => navigate('/login');
+//   const handleSignupClick = () => navigate('/register');
+//   const handleDashboardClick = () => navigate('/adminboard');
+//   const handleActivityClick = () => navigate('/activity');
+//   const handleVehicleListClick = () => navigate('/admin');
+
+//   // Vérifie si l'utilisateur est sur une page spécifique
+//   const isLoginPage = location.pathname === '/login';
+//   const isAdminBoard = location.pathname === '/adminboard';
+
+//   // Affichage des boutons selon les conditions
+//   if (isAdminBoard) {
+//     return (
+//       <button
+//         type="button"
+//         className="btn btn-success btn-sm"
+//         onClick={handleVehicleListClick}
+//       >
+//         Liste des véhicules
+//       </button>
+//     );
+//   }
+
+//   return (
+//     <div>
+//       {!isAuthenticated && !isLoginPage ? (
+//         <>
+//           <button
+//             type="button"
+//             className="btn btn-primary btn-sm"
+//             onClick={handleLoginClick}
+//           >
+//             Connexion
+//           </button>
+//           <button
+//             type="button"
+//             className="btn btn-secondary btn-sm"
+//             style={{ marginLeft: '10px' }}
+//             onClick={handleSignupClick}
+//           >
+//             Inscription
+//           </button>
+//         </>
+//       ) : (
+//         isAuthenticated && (
+//           <div>
+//             {isAdmin && (
+//               <>
+//                 <button
+//                   type="button"
+//                   className="btn btn-primary btn-sm"
+//                   onClick={handleDashboardClick}
+//                 >
+//                   Tableau de bord
+//                 </button>
+//                 <button
+//                   type="button"
+//                   className="btn btn-warning btn-sm"
+//                   style={{ marginLeft: '10px' }}
+//                   onClick={handleActivityClick}
+//                 >
+//                   Activité
+//                 </button>
+//               </>
+//             )}
+//             <button
+//               type="button"
+//               className="btn btn-danger btn-sm"
+//               style={{ marginLeft: '10px' }}
+//               onClick={handleLogoutClick}
+//             >
+//               Déconnexion
+//             </button>
+//           </div>
+//         )
+//       )}
+//     </div>
+//   );
+// };
+
+// export default AuthButton;
+
+
+// src/components/AuthButton.js VERSION TEST
+// import React from 'react';
+// import { useNavigate, useLocation } from 'react-router-dom';
+// import { useSelector, useDispatch } from 'react-redux';
+// import { logout } from '../redux/reducers/sliceAuth';
+// import axios from 'axios';
+
+// const AuthButton = () => {
+//   const navigate = useNavigate();
+//   const location = useLocation();
+//   const dispatch = useDispatch();
+//   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+
+//   const handleLogoutClick = async () => {
+//     try {
+//       await axios.post(process.env.REACT_APP_BACKEND_URL + '/api/users/logout', {}, { withCredentials: true });
+//       dispatch(logout());
+//       navigate('/');
+//     } catch (error) {
+//       console.error('Erreur lors de la déconnexion :', error);
+//     }
+//   };
+
+//   const handleLoginClick = () => navigate('/login');
+//   const handleSignupClick = () => navigate('/register');
+//   const handleAdminRedirect = () => navigate('/admin');
+
+//   const isLoginPage = location.pathname === '/login';
+//   const isAdminBoard = location.pathname === '/adminboard';
+
+//   if (isAdminBoard) {
+//     return (
+//       <button
+//         type="button"
+//         className="btn btn-success btn-sm"
+//         onClick={handleAdminRedirect}
+//       >
+//         Liste des véhicules
+//       </button>
+//     );
+//   }
+
+//   return (
+//     <div>
+//       {!isAuthenticated && !isLoginPage ? (
+//         <>
+//           <button
+//             type="button"
+//             className="btn btn-primary btn-sm"
+//             onClick={handleLoginClick}
+//           >
+//             Connexion
+//           </button>
+//           <button
+//             type="button"
+//             className="btn btn-secondary btn-sm"
+//             style={{ marginLeft: '10px' }}
+//             onClick={handleSignupClick}
+//           >
+//             Inscription
+//           </button>
+//         </>
+//       ) : (
+//         isAuthenticated && (
+//           <button
+//             type="button"
+//             className="btn btn-danger btn-sm"
+//             onClick={handleLogoutClick}
+//           >
+//             Déconnexion
+//           </button>
+//         )
+//       )}
+//     </div>
+//   );
+// };
+
+// export default AuthButton;
+
+// 
+
+// 
+
+
+// import React from 'react';
+// import { useNavigate, useLocation } from 'react-router-dom';
+// import { useSelector, useDispatch } from 'react-redux';
+// import { logout } from '../redux/reducers/sliceAuth';
+// import axios from 'axios';
+
+// const DefaultLayout = (props) => {
+//   const navigate = useNavigate();
+//   const location = useLocation();
+//   const dispatch = useDispatch();
+//   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+
+//   const headerStyle = {
+//     backgroundColor: '#343a40',
+//     padding: '10px',
+//     display: 'flex',
+//     justifyContent: 'space-between',
+//     alignItems: 'center',
+//   };
+
+//   const titleStyle = {
+//     margin: 0,
+//     color: 'white',
+//   };
+
+//   const handleLogoutClick = async () => {
+//     try {
+//       await axios.post(process.env.REACT_APP_BACKEND_URL+'/api/users/logout', {}, { withCredentials: true });
+//       dispatch(logout());
+//       navigate('/');
+//     } catch (error) {
+//       console.error('Erreur lors de la déconnexion :', error);
+//     }
+//   };
+
+//   const handleLoginClick = () => {
+//     navigate('/login');
+//   };
+
+//   const handleSignupClick = () => {
+//     navigate('/register');
+//   };
+
+//   const handleAdminRedirect = () => {
+//     navigate('/admin');
+//   };
+
+//   const AuthButton = () => {
+//     const isLoginPage = location.pathname === '/login';
+//     const isAdminBoard = location.pathname === '/adminboard'; // Vérifie si la page actuelle est /adminboard
+
+//     if (isAdminBoard) {
+//       return (
+//         <button
+//           type="button"
+//           className="btn btn-success btn-sm"
+//           onClick={handleAdminRedirect}
+//         >
+//           Liste des véhicules
+//         </button>
+//       );
+//     }
+
+//     return (
+//       <div>
+//         {!isAuthenticated && !isLoginPage ? (
+//           <>
+//             <button
+//               type="button"
+//               className="btn btn-primary btn-sm"
+//               onClick={handleLoginClick}
+//             >
+//               Connexion
+//             </button>
+//             <button
+//               type="button"
+//               className="btn btn-secondary btn-sm"
+//               style={{ marginLeft: '10px' }}
+//               onClick={handleSignupClick}
+//             >
+//               Inscription
+//             </button>
+//           </>
+//         ) : (
+//           isAuthenticated && (
+//             <button
+//               type="button"
+//               className="btn btn-danger btn-sm"
+//               onClick={handleLogoutClick}
+//             >
+//               Déconnexion
+//             </button>
+//           )
+//         )}
+//       </div>
+//     );
+//   };
+
+//   return (
+//     <div>
+//       <div className="header" style={headerStyle}>
+//         <h1 style={titleStyle}>AUTOECO</h1>
+//         <AuthButton />
+//       </div>
+//       <div className="content">
+//         {props.children}
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default DefaultLayout;
 
 
 // // //src/components/AuthButton.js  VERSION TEST bouton déconnexion pour page payement

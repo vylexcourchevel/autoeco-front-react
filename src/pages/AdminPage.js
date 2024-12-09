@@ -1,5 +1,7 @@
 
 
+
+
 // //src/pages/AdminPage.js VERSION TEST 
 
 
@@ -49,13 +51,7 @@ const AdminPage = () => {
     }));
   };
 
-  // const handleFileChange = (e) => {
-  //   const file = e.target.files[0];
-  //   setFormValues((prevValues) => ({
-  //     ...prevValues,
-  //     file: file,
-  //   }));
-  // };
+  
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];

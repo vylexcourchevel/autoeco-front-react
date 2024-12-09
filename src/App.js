@@ -1,10 +1,9 @@
-// src/App.js
-
 import './App.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { useEffect } from 'react';
-//import { logout } from './redux/reducers/sliceAuth';
+import { useDispatch } from 'react-redux';  // Correctement importé depuis react-redux
+import { useEffect } from 'react';  // Correctement importé depuis react
+
+// Import des pages
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -21,20 +20,17 @@ import ProtectedRoute from './components/ProtectedRoute';
 import ResetPasswordPage from './pages/ResetPasswordPage';
 import BasketStripe from './pages/PageBasket/BasketStripe';
 
-
-
-//PAGES COMPONENTS 
-
+// PAGES COMPONENTS (Stripe)
 import BasketStripeCheckout from './pages/PageBasket/BasketStripe';
 import Success from './components/stripe/success';
-import  Canceled from './components/stripe/canceled'; 
+import Canceled from './components/stripe/canceled';
 
 function App() {
-  console.log(process.env.REACT_APP_BACKEND_URL)
+  console.log(process.env.REACT_APP_BACKEND_URL);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    // Supprimer le logout automatique au montage pour ne pas effacer l'état d'authentification
+    // Aucune action de logout automatique au montage
   }, [dispatch]);
 
   return (
@@ -48,18 +44,16 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/basket" element={<BasketStripe />} />
             <Route path="/checkout" element={<BasketStripeCheckout />} />
-            <Route path="/success" element={<success />} />
+            <Route path="/success" element={<Success />} />
             <Route path="/canceled" element={<Canceled />} />
 
-
+            {/* Page d'inscription avec protection */}
             <Route
               path="/register"
-              element={
-                <ProtectedRoute>
-                  <Register />
-                </ProtectedRoute>
-              }
+              element={<Register />}
             />
+
+            {/* Pages protégées, requérant une authentification */}
             <Route
               path="/bookingCar"
               element={
@@ -96,7 +90,7 @@ function App() {
               path="/payment/:carId"
               element={
                 <ProtectedRoute allowedForAuthenticatedUsersOnly={true}>
-                  <PaymentDashboard  />
+                  <PaymentDashboard />
                 </ProtectedRoute>
               }
             />
@@ -116,6 +110,7 @@ function App() {
                 </ProtectedRoute>
               }
             />
+
             {/* Route d'erreur protégée pour les administrateurs */}
             <Route
               path="*"
@@ -124,8 +119,6 @@ function App() {
                   <Errorpage />
                 </ProtectedRoute>
               }
-              
-              
             />
           </Routes>
         </DefaultLayout>
@@ -135,6 +128,147 @@ function App() {
 }
 
 export default App;
+
+// // src/App.js
+
+// import './App.css';
+// import { BrowserRouter, Routes, Route } from 'react-router-dom';
+// import { useDispatch } from 'react-redux';
+// import { useEffect } from 'react';
+// //import { logout } from './redux/reducers/sliceAuth';
+// import Home from './pages/Home';
+// import Login from './pages/Login';
+// import Register from './pages/Register';
+// import BookingCar from './pages/BookingCar';
+// import AdminPage from './pages/AdminPage';
+// import AdminCarPage from './pages/AdminCarPage';
+// import Errorpage from './pages/Errorpage';
+// import ReservationForm from './pages/ReservationForm';
+// import DefaultLayout from './components/DefaultLayout';
+// import PaymentDashboard from './pages/PaymentDashboard';
+// import ActivityDashboard from './pages/ActivityDashboard';
+// import AdminDashboard from './pages/AdminDashboard';
+// import ProtectedRoute from './components/ProtectedRoute';
+// import ResetPasswordPage from './pages/ResetPasswordPage';
+// import BasketStripe from './pages/PageBasket/BasketStripe';
+
+
+
+
+
+// //PAGES COMPONENTS 
+
+// import BasketStripeCheckout from './pages/PageBasket/BasketStripe';
+// import Success from './components/stripe/success';
+// import  Canceled from './components/stripe/canceled'; 
+
+// function App() {
+//   console.log(process.env.REACT_APP_BACKEND_URL)
+//   const dispatch = useDispatch();
+
+//   useEffect(() => {
+//     // Supprimer le logout automatique au montage pour ne pas effacer l'état d'authentification
+//   }, [dispatch]);
+
+//   return (
+//     <div className="App">
+//       <BrowserRouter>
+//         <DefaultLayout>
+//           <Routes>
+//             {/* Route d'accueil accessible à tous */}
+           
+//             <Route path="/" element={<Home />} />
+//             <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
+//             <Route path="/login" element={<Login />} />
+//             <Route path="/basket" element={<BasketStripe />} />
+//             <Route path="/checkout" element={<BasketStripeCheckout />} />
+//             <Route path="/success" element={<Success />} />
+//             <Route path="/canceled" element={<Canceled />} />
+
+
+//             <Route
+//               path="/register"
+//               element={
+//                 <ProtectedRoute>
+//                   <Register />
+//                 </ProtectedRoute>
+//               }
+//             />
+//             <Route
+//               path="/bookingCar"
+//               element={
+//                 <ProtectedRoute allowedForAuthenticatedUsersOnly={true}>
+//                   <BookingCar />
+//                 </ProtectedRoute>
+//               }
+//             />
+//             <Route
+//               path="/admin"
+//               element={
+//                 <ProtectedRoute allowedForAdminOnly={true}>
+//                   <AdminPage />
+//                 </ProtectedRoute>
+//               }
+//             />
+//             <Route
+//               path="/admincar"
+//               element={
+//                 <ProtectedRoute allowedForAuthenticatedUsersOnly={true}>
+//                   <AdminCarPage />
+//                 </ProtectedRoute>
+//               }
+//             />
+//             <Route
+//               path="/reservation"
+//               element={
+//                 <ProtectedRoute allowedForAuthenticatedUsersOnly={true}>
+//                   <ReservationForm />
+//                 </ProtectedRoute>
+//               }
+//             />
+//             <Route
+//               path="/payment/:carId"
+//               element={
+//                 <ProtectedRoute allowedForAuthenticatedUsersOnly={true}>
+//                   <PaymentDashboard  />
+//                 </ProtectedRoute>
+//               }
+//             />
+//             <Route
+//               path="/activity"
+//               element={
+//                 <ProtectedRoute allowedForAdminOnly={true}>
+//                   <ActivityDashboard />
+//                 </ProtectedRoute>
+//               }
+//             />
+//             <Route
+//               path="/adminboard"
+//               element={
+//                 <ProtectedRoute allowedForAdminOnly={true}>
+//                   <AdminDashboard />
+//                 </ProtectedRoute>
+//               }
+//             />
+//             {/* Route d'erreur protégée pour les administrateurs */}
+//             <Route
+//               path="*"
+//               element={
+//                 <ProtectedRoute allowedForAdminOnly={true}>
+//                   <Errorpage />
+//                 </ProtectedRoute>
+//               }
+              
+              
+//             />
+//           </Routes>
+//         </DefaultLayout>
+//       </BrowserRouter>
+//     </div>
+//   );
+// }
+
+// export default App;
 
 
 // // src/App.js
