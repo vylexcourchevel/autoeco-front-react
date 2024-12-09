@@ -1,7 +1,3 @@
-
-
-// src/pages/AdminDashboard.js VERSION OK DEFIN ITIVE 
-
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css'; // Importation de Bootstrap
@@ -19,11 +15,12 @@ const AdminDashboard = () => {
         phoneNumber: '',
         isAdmin: false,
     });
+    const [isAddUserVisible, setIsAddUserVisible] = useState(false); // État pour contrôler la visibilité du formulaire "Ajouter un Utilisateur"
 
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const response = await axios.get(process.env.REACT_APP_BACKEND_URL+'/api/users/all', {
+                const response = await axios.get(process.env.REACT_APP_BACKEND_URL + '/api/users/all', {
                     withCredentials: true
                 });
                 if (response.status === 200) {
@@ -50,7 +47,7 @@ const AdminDashboard = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post(process.env.REACT_APP_BACKEND_URL+'/api/users/add', formData, {
+            const response = await axios.post(process.env.REACT_APP_BACKEND_URL + '/api/users/add', formData, {
                 withCredentials: true
             });
             alert('Utilisateur ajouté avec succès');
@@ -85,7 +82,7 @@ const AdminDashboard = () => {
     const handleUpdate = async (e) => {
         e.preventDefault();
         try {
-            await axios.put(process.env.REACT_APP_BACKEND_URL+`/api/users/update/${editingUserId}`, formData, {
+            await axios.put(process.env.REACT_APP_BACKEND_URL + `/api/users/update/${editingUserId}`, formData, {
                 withCredentials: true
             });
             alert('Utilisateur mis à jour avec succès');
@@ -108,7 +105,7 @@ const AdminDashboard = () => {
     const toggleAdminStatus = async (userId, currentStatus) => {
         try {
             const newStatus = !currentStatus;
-            await axios.post(process.env.REACT_APP_BACKEND_URL+`/api/users/admin/${userId}`, { isAdmin: newStatus }, {
+            await axios.post(process.env.REACT_APP_BACKEND_URL + `/api/users/admin/${userId}`, { isAdmin: newStatus }, {
                 withCredentials: true
             });
             setUsers(users.map(user =>
@@ -121,7 +118,7 @@ const AdminDashboard = () => {
 
     const deleteUser = async (userId) => {
         try {
-            await axios.delete(process.env.REACT_APP_BACKEND_URL+`/api/users/delete/${userId}`, {
+            await axios.delete(process.env.REACT_APP_BACKEND_URL + `/api/users/delete/${userId}`, {
                 withCredentials: true
             });
             setUsers(users.filter(user => user.id !== userId));
@@ -130,101 +127,110 @@ const AdminDashboard = () => {
         }
     };
 
+    const toggleAddUserForm = () => {
+        setIsAddUserVisible(!isAddUserVisible); // Toggle pour ouvrir/fermer le formulaire d'ajout d'utilisateur
+    };
+
     return (
         <div className="container py-4" style={{ padding: '30px 50px' }}>
             <h1 className="text-center mb-4">Tableau de Bord Administrateur</h1>
 
+            {/* Bouton pour ouvrir/fermer le formulaire d'ajout d'utilisateur */}
             <div className="card mb-4">
                 <div className="card-header">
-                    <h2 className="mb-0">Ajouter un Utilisateur</h2>
+                    <button onClick={toggleAddUserForm} className="btn btn-success">
+                        {isAddUserVisible ? 'Fermer le Formulaire' : 'Ajouter un Utilisateur'}
+                    </button>
                 </div>
-                <div className="card-body">
-                    <form onSubmit={handleSubmit} className="row g-3">
-                        <div className="col-md-4">
-                            <label className="form-label">Prénom</label>
-                            <input
-                                type="text"
-                                name="firstName"
-                                className="form-control"
-                                value={formData.firstName}
-                                onChange={handleChange}
-                                required
-                            />
-                        </div>
-                        <div className="col-md-4">
-                            <label className="form-label">Nom</label>
-                            <input
-                                type="text"
-                                name="lastName"
-                                className="form-control"
-                                value={formData.lastName}
-                                onChange={handleChange}
-                                required
-                            />
-                        </div>
-                        <div className="col-md-4">
-                            <label className="form-label">Email</label>
-                            <input
-                                type="email"
-                                name="email"
-                                className="form-control"
-                                value={formData.email}
-                                onChange={handleChange}
-                                required
-                            />
-                        </div>
-                        <div className="col-md-4">
-                            <label className="form-label">Mot de Passe</label>
-                            <input
-                                type="password"
-                                name="password"
-                                className="form-control"
-                                value={formData.password}
-                                onChange={handleChange}
-                            />
-                        </div>
-                        <div className="col-md-4">
-                            <label className="form-label">Adresse</label>
-                            <input
-                                type="text"
-                                name="address"
-                                className="form-control"
-                                value={formData.address}
-                                onChange={handleChange}
-                                required
-                            />
-                        </div>
-                        <div className="col-md-4">
-                            <label className="form-label">Numéro de Téléphone</label>
-                            <input
-                                type="text"
-                                name="phoneNumber"
-                                className="form-control"
-                                value={formData.phoneNumber}
-                                onChange={handleChange}
-                            />
-                        </div>
-                        <div className="col-md-4 form-check">
-                            <input
-                                type="checkbox"
-                                name="isAdmin"
-                                className="form-check-input"
-                                checked={formData.isAdmin}
-                                onChange={handleChange}
-                            />
-                            <label className="form-check-label">Est Administrateur</label>
-                        </div>
-                        <div className="col-12">
-                            <button type="submit" className="btn btn-primary">Ajouter Utilisateur</button>
-                        </div>
-                    </form>
-                </div>
+                {isAddUserVisible && (
+                    <div className="card-body">
+                        <form onSubmit={handleSubmit} className="row g-3">
+                            <div className="col-md-4">
+                                <label className="form-label">Prénom</label>
+                                <input
+                                    type="text"
+                                    name="firstName"
+                                    className="form-control"
+                                    value={formData.firstName}
+                                    onChange={handleChange}
+                                    required
+                                />
+                            </div>
+                            <div className="col-md-4">
+                                <label className="form-label">Nom</label>
+                                <input
+                                    type="text"
+                                    name="lastName"
+                                    className="form-control"
+                                    value={formData.lastName}
+                                    onChange={handleChange}
+                                    required
+                                />
+                            </div>
+                            <div className="col-md-4">
+                                <label className="form-label">Email</label>
+                                <input
+                                    type="email"
+                                    name="email"
+                                    className="form-control"
+                                    value={formData.email}
+                                    onChange={handleChange}
+                                    required
+                                />
+                            </div>
+                            <div className="col-md-4">
+                                <label className="form-label">Mot de Passe</label>
+                                <input
+                                    type="password"
+                                    name="password"
+                                    className="form-control"
+                                    value={formData.password}
+                                    onChange={handleChange}
+                                />
+                            </div>
+                            <div className="col-md-4">
+                                <label className="form-label">Adresse</label>
+                                <input
+                                    type="text"
+                                    name="address"
+                                    className="form-control"
+                                    value={formData.address}
+                                    onChange={handleChange}
+                                    required
+                                />
+                            </div>
+                            <div className="col-md-4">
+                                <label className="form-label">Numéro de Téléphone</label>
+                                <input
+                                    type="text"
+                                    name="phoneNumber"
+                                    className="form-control"
+                                    value={formData.phoneNumber}
+                                    onChange={handleChange}
+                                />
+                            </div>
+                            <div className="col-md-4 form-check">
+                                <input
+                                    type="checkbox"
+                                    name="isAdmin"
+                                    className="form-check-input"
+                                    checked={formData.isAdmin}
+                                    onChange={handleChange}
+                                />
+                                <label className="form-check-label">Est Administrateur</label>
+                            </div>
+                            <div className="col-12">
+                                <button type="submit" className="btn btn-primary">Ajouter un Utilisateur</button>
+                            </div>
+                        </form>
+                    </div>
+                )}
             </div>
 
             {editingUserId && (
                 <div className="card mb-4">
                     <div className="card-header">
-                        <h2 className="mb-0">Modifier Utilisateur</h2>
+                        <h2 className="mb-0">Modifier un Utilisateur</h2>
                     </div>
                     <div className="card-body">
                         <form onSubmit={handleUpdate} className="row g-3">
@@ -352,6 +358,643 @@ const AdminDashboard = () => {
 };
 
 export default AdminDashboard;
+
+
+
+
+
+
+// import React, { useEffect, useState } from 'react';
+// import axios from 'axios';
+// import 'bootstrap/dist/css/bootstrap.min.css'; // Importation de Bootstrap
+
+// const AdminDashboard = () => {
+//     const [users, setUsers] = useState([]);
+//     const [error, setError] = useState(null);
+//     const [editingUserId, setEditingUserId] = useState(null);
+//     const [formData, setFormData] = useState({
+//         firstName: '',
+//         lastName: '',
+//         email: '',
+//         password: '',
+//         address: '',
+//         phoneNumber: '',
+//         isAdmin: false,
+//     });
+
+//     // Nouvel état pour contrôler l'affichage de la fenêtre Ajouter un utilisateur
+//     const [showAddUserForm, setShowAddUserForm] = useState(false);
+
+//     useEffect(() => {
+//         const fetchUsers = async () => {
+//             try {
+//                 const response = await axios.get(process.env.REACT_APP_BACKEND_URL+'/api/users/all', {
+//                     withCredentials: true
+//                 });
+//                 if (response.status === 200) {
+//                     setUsers(response.data);
+//                 } else {
+//                     setError(`Erreur inattendue: ${response.statusText}`);
+//                 }
+//             } catch (err) {
+//                 setError("Une erreur s'est produite lors de la récupération des utilisateurs.");
+//             }
+//         };
+
+//         fetchUsers();
+//     }, []);
+
+//     const handleChange = (e) => {
+//         const { name, value, type, checked } = e.target;
+//         setFormData({
+//             ...formData,
+//             [name]: type === 'checkbox' ? checked : value,
+//         });
+//     };
+
+//     const handleSubmit = async (e) => {
+//         e.preventDefault();
+//         try {
+//             const response = await axios.post(process.env.REACT_APP_BACKEND_URL+'/api/users/add', formData, {
+//                 withCredentials: true
+//             });
+//             alert('Utilisateur ajouté avec succès');
+//             setFormData({
+//                 firstName: '',
+//                 lastName: '',
+//                 email: '',
+//                 password: '',
+//                 address: '',
+//                 phoneNumber: '',
+//                 isAdmin: false,
+//             });
+//             setUsers([...users, response.data]);
+//             setShowAddUserForm(false); // Fermer le formulaire après ajout
+//         } catch (error) {
+//             alert('Erreur lors de l\'ajout de l\'utilisateur');
+//         }
+//     };
+
+//     const handleEditClick = (user) => {
+//         setEditingUserId(user.id);
+//         setFormData({
+//             firstName: user.firstName,
+//             lastName: user.lastName,
+//             email: user.email,
+//             password: '',
+//             address: user.address,
+//             phoneNumber: user.phoneNumber,
+//             isAdmin: user.isAdmin,
+//         });
+//     };
+
+//     const handleUpdate = async (e) => {
+//         e.preventDefault();
+//         try {
+//             await axios.put(process.env.REACT_APP_BACKEND_URL+`/api/users/update/${editingUserId}`, formData, {
+//                 withCredentials: true
+//             });
+//             alert('Utilisateur mis à jour avec succès');
+//             setUsers(users.map(user => user.id === editingUserId ? { ...user, ...formData } : user));
+//             setEditingUserId(null);
+//             setFormData({
+//                 firstName: '',
+//                 lastName: '',
+//                 email: '',
+//                 password: '',
+//                 address: '',
+//                 phoneNumber: '',
+//                 isAdmin: false,
+//             });
+//         } catch (error) {
+//             alert('Erreur lors de la mise à jour de l\'utilisateur');
+//         }
+//     };
+
+//     const toggleAdminStatus = async (userId, currentStatus) => {
+//         try {
+//             const newStatus = !currentStatus;
+//             await axios.post(process.env.REACT_APP_BACKEND_URL+`/api/users/admin/${userId}`, { isAdmin: newStatus }, {
+//                 withCredentials: true
+//             });
+//             setUsers(users.map(user =>
+//                 user.id === userId ? { ...user, isAdmin: newStatus } : user
+//             ));
+//         } catch (err) {
+//             setError("Une erreur s'est produite lors de la mise à jour du statut d'admin.");
+//         }
+//     };
+
+//     const deleteUser = async (userId) => {
+//         try {
+//             await axios.delete(process.env.REACT_APP_BACKEND_URL+`/api/users/delete/${userId}`, {
+//                 withCredentials: true
+//             });
+//             setUsers(users.filter(user => user.id !== userId));
+//         } catch (err) {
+//             setError("Une erreur s'est produite lors de la suppression de l'utilisateur.");
+//         }
+//     };
+
+//     // Fonction pour basculer l'état de visibilité du formulaire
+//     const toggleAddUserForm = () => {
+//         setShowAddUserForm(prevState => !prevState);
+//     };
+
+//     return (
+//         <div className="container py-4" style={{ padding: '30px 50px' }}>
+//             <h1 className="text-center mb-4">Tableau de Bord Administrateur</h1>
+
+//             <button className="btn btn-primary mb-4" onClick={toggleAddUserForm}>
+//                 {showAddUserForm ? 'Fermer le formulaire' : 'Ajouter un Utilisateur'}
+//             </button>
+
+//             {/* Si showAddUserForm est vrai, afficher le formulaire d'ajout d'utilisateur */}
+//             {showAddUserForm && (
+//                 <div className="card mb-4">
+//                     <div className="card-header">
+//                         <h2 className="mb-0">Ajouter un Utilisateur</h2>
+//                     </div>
+//                     <div className="card-body">
+//                         <form onSubmit={handleSubmit} className="row g-3">
+//                             <div className="col-md-4">
+//                                 <label className="form-label">Prénom</label>
+//                                 <input
+//                                     type="text"
+//                                     name="firstName"
+//                                     className="form-control"
+//                                     value={formData.firstName}
+//                                     onChange={handleChange}
+//                                     required
+//                                 />
+//                             </div>
+//                             <div className="col-md-4">
+//                                 <label className="form-label">Nom</label>
+//                                 <input
+//                                     type="text"
+//                                     name="lastName"
+//                                     className="form-control"
+//                                     value={formData.lastName}
+//                                     onChange={handleChange}
+//                                     required
+//                                 />
+//                             </div>
+//                             <div className="col-md-4">
+//                                 <label className="form-label">Email</label>
+//                                 <input
+//                                     type="email"
+//                                     name="email"
+//                                     className="form-control"
+//                                     value={formData.email}
+//                                     onChange={handleChange}
+//                                     required
+//                                 />
+//                             </div>
+//                             <div className="col-md-4">
+//                                 <label className="form-label">Mot de Passe</label>
+//                                 <input
+//                                     type="password"
+//                                     name="password"
+//                                     className="form-control"
+//                                     value={formData.password}
+//                                     onChange={handleChange}
+//                                 />
+//                             </div>
+//                             <div className="col-md-4">
+//                                 <label className="form-label">Adresse</label>
+//                                 <input
+//                                     type="text"
+//                                     name="address"
+//                                     className="form-control"
+//                                     value={formData.address}
+//                                     onChange={handleChange}
+//                                     required
+//                                 />
+//                             </div>
+//                             <div className="col-md-4">
+//                                 <label className="form-label">Numéro de Téléphone</label>
+//                                 <input
+//                                     type="text"
+//                                     name="phoneNumber"
+//                                     className="form-control"
+//                                     value={formData.phoneNumber}
+//                                     onChange={handleChange}
+//                                 />
+//                             </div>
+//                             <div className="col-md-4 form-check">
+//                                 <input
+//                                     type="checkbox"
+//                                     name="isAdmin"
+//                                     className="form-check-input"
+//                                     checked={formData.isAdmin}
+//                                     onChange={handleChange}
+//                                 />
+//                                 <label className="form-check-label">Est Administrateur</label>
+//                             </div>
+//                             <div className="col-12">
+//                                 <button type="submit" className="btn btn-primary">Ajouter un  Utilisateur</button>
+//                             </div>
+//                         </form>
+//                     </div>
+//                 </div>
+//             )}
+
+//             {/* Liste des utilisateurs et autres contenus non modifiés */}
+//             <div className="card">
+//                 <div className="card-header">
+//                     <h2>Liste des utilisateurs</h2>
+//                 </div>
+//                 <div className="card-body">
+//                     {error && <p className="text-danger">{error}</p>}
+//                     <div className="list-group">
+//                         {users.map(user => (
+//                             <div key={user.id} className="list-group-item">
+//                                 <div className="row">
+//                                     <div className="col-md-6">
+//                                         <p><strong>Prénom:</strong> {user.firstName}</p>
+//                                         <p><strong>Nom:</strong> {user.lastName}</p>
+//                                         <p><strong>Email:</strong> {user.email}</p>
+//                                     </div>
+//                                     <div className="col-md-6">
+//                                         <p><strong>Est Admin:</strong> {user.isAdmin ? 'Oui' : 'Non'}</p>
+//                                         <p><strong>Date de Création:</strong> {new Date(user.createdAt).toLocaleDateString()}</p>
+//                                     </div>
+//                                     <div className="col-md-12">
+//                                         <button onClick={() => toggleAdminStatus(user.id, user.isAdmin)} className="btn btn-warning me-2">
+//                                             {user.isAdmin ? 'Supprimer le statut Admin' : 'Activer le statut Admin'}
+//                                         </button>
+//                                         <button onClick={() => deleteUser(user.id)} className="btn btn-danger me-2">
+//                                             Supprimer
+//                                         </button>
+//                                         <button onClick={() => handleEditClick(user)} className="btn btn-secondary">
+//                                             Modifier
+//                                         </button>
+//                                     </div>
+//                                 </div>
+//                             </div>
+//                         ))}
+//                     </div>
+//                 </div>
+//             </div>
+//         </div>
+//     );
+// };
+
+// export default AdminDashboard;
+
+
+// // src/pages/AdminDashboard.js VERSION OK DEFIN ITIVE 
+
+// import React, { useEffect, useState } from 'react';
+// import axios from 'axios';
+// import 'bootstrap/dist/css/bootstrap.min.css'; // Importation de Bootstrap
+
+// const AdminDashboard = () => {
+//     const [users, setUsers] = useState([]);
+//     const [error, setError] = useState(null);
+//     const [editingUserId, setEditingUserId] = useState(null);
+//     const [formData, setFormData] = useState({
+//         firstName: '',
+//         lastName: '',
+//         email: '',
+//         password: '',
+//         address: '',
+//         phoneNumber: '',
+//         isAdmin: false,
+//     });
+
+//     useEffect(() => {
+//         const fetchUsers = async () => {
+//             try {
+//                 const response = await axios.get(process.env.REACT_APP_BACKEND_URL+'/api/users/all', {
+//                     withCredentials: true
+//                 });
+//                 if (response.status === 200) {
+//                     setUsers(response.data);
+//                 } else {
+//                     setError(`Erreur inattendue: ${response.statusText}`);
+//                 }
+//             } catch (err) {
+//                 setError("Une erreur s'est produite lors de la récupération des utilisateurs.");
+//             }
+//         };
+
+//         fetchUsers();
+//     }, []);
+
+//     const handleChange = (e) => {
+//         const { name, value, type, checked } = e.target;
+//         setFormData({
+//             ...formData,
+//             [name]: type === 'checkbox' ? checked : value,
+//         });
+//     };
+
+//     const handleSubmit = async (e) => {
+//         e.preventDefault();
+//         try {
+//             const response = await axios.post(process.env.REACT_APP_BACKEND_URL+'/api/users/add', formData, {
+//                 withCredentials: true
+//             });
+//             alert('Utilisateur ajouté avec succès');
+//             setFormData({
+//                 firstName: '',
+//                 lastName: '',
+//                 email: '',
+//                 password: '',
+//                 address: '',
+//                 phoneNumber: '',
+//                 isAdmin: false,
+//             });
+//             setUsers([...users, response.data]);
+//         } catch (error) {
+//             alert('Erreur lors de l\'ajout de l\'utilisateur');
+//         }
+//     };
+
+//     const handleEditClick = (user) => {
+//         setEditingUserId(user.id);
+//         setFormData({
+//             firstName: user.firstName,
+//             lastName: user.lastName,
+//             email: user.email,
+//             password: '',
+//             address: user.address,
+//             phoneNumber: user.phoneNumber,
+//             isAdmin: user.isAdmin,
+//         });
+//     };
+
+//     const handleUpdate = async (e) => {
+//         e.preventDefault();
+//         try {
+//             await axios.put(process.env.REACT_APP_BACKEND_URL+`/api/users/update/${editingUserId}`, formData, {
+//                 withCredentials: true
+//             });
+//             alert('Utilisateur mis à jour avec succès');
+//             setUsers(users.map(user => user.id === editingUserId ? { ...user, ...formData } : user));
+//             setEditingUserId(null);
+//             setFormData({
+//                 firstName: '',
+//                 lastName: '',
+//                 email: '',
+//                 password: '',
+//                 address: '',
+//                 phoneNumber: '',
+//                 isAdmin: false,
+//             });
+//         } catch (error) {
+//             alert('Erreur lors de la mise à jour de l\'utilisateur');
+//         }
+//     };
+
+//     const toggleAdminStatus = async (userId, currentStatus) => {
+//         try {
+//             const newStatus = !currentStatus;
+//             await axios.post(process.env.REACT_APP_BACKEND_URL+`/api/users/admin/${userId}`, { isAdmin: newStatus }, {
+//                 withCredentials: true
+//             });
+//             setUsers(users.map(user =>
+//                 user.id === userId ? { ...user, isAdmin: newStatus } : user
+//             ));
+//         } catch (err) {
+//             setError("Une erreur s'est produite lors de la mise à jour du statut d'admin.");
+//         }
+//     };
+
+//     const deleteUser = async (userId) => {
+//         try {
+//             await axios.delete(process.env.REACT_APP_BACKEND_URL+`/api/users/delete/${userId}`, {
+//                 withCredentials: true
+//             });
+//             setUsers(users.filter(user => user.id !== userId));
+//         } catch (err) {
+//             setError("Une erreur s'est produite lors de la suppression de l'utilisateur.");
+//         }
+//     };
+
+//     return (
+//         <div className="container py-4" style={{ padding: '30px 50px' }}>
+//             <h1 className="text-center mb-4">Tableau de Bord Administrateur</h1>
+
+//             <div className="card mb-4">
+//                 <div className="card-header">
+//                     <h2 className="mb-0">Ajouter un Utilisateur</h2>
+//                 </div>
+//                 <div className="card-body">
+//                     <form onSubmit={handleSubmit} className="row g-3">
+//                         <div className="col-md-4">
+//                             <label className="form-label">Prénom</label>
+//                             <input
+//                                 type="text"
+//                                 name="firstName"
+//                                 className="form-control"
+//                                 value={formData.firstName}
+//                                 onChange={handleChange}
+//                                 required
+//                             />
+//                         </div>
+//                         <div className="col-md-4">
+//                             <label className="form-label">Nom</label>
+//                             <input
+//                                 type="text"
+//                                 name="lastName"
+//                                 className="form-control"
+//                                 value={formData.lastName}
+//                                 onChange={handleChange}
+//                                 required
+//                             />
+//                         </div>
+//                         <div className="col-md-4">
+//                             <label className="form-label">Email</label>
+//                             <input
+//                                 type="email"
+//                                 name="email"
+//                                 className="form-control"
+//                                 value={formData.email}
+//                                 onChange={handleChange}
+//                                 required
+//                             />
+//                         </div>
+//                         <div className="col-md-4">
+//                             <label className="form-label">Mot de Passe</label>
+//                             <input
+//                                 type="password"
+//                                 name="password"
+//                                 className="form-control"
+//                                 value={formData.password}
+//                                 onChange={handleChange}
+//                             />
+//                         </div>
+//                         <div className="col-md-4">
+//                             <label className="form-label">Adresse</label>
+//                             <input
+//                                 type="text"
+//                                 name="address"
+//                                 className="form-control"
+//                                 value={formData.address}
+//                                 onChange={handleChange}
+//                                 required
+//                             />
+//                         </div>
+//                         <div className="col-md-4">
+//                             <label className="form-label">Numéro de Téléphone</label>
+//                             <input
+//                                 type="text"
+//                                 name="phoneNumber"
+//                                 className="form-control"
+//                                 value={formData.phoneNumber}
+//                                 onChange={handleChange}
+//                             />
+//                         </div>
+//                         <div className="col-md-4 form-check">
+//                             <input
+//                                 type="checkbox"
+//                                 name="isAdmin"
+//                                 className="form-check-input"
+//                                 checked={formData.isAdmin}
+//                                 onChange={handleChange}
+//                             />
+//                             <label className="form-check-label">Est Administrateur</label>
+//                         </div>
+//                         <div className="col-12">
+//                             <button type="submit" className="btn btn-primary">Ajouter un  Utilisateur</button>
+//                         </div>
+//                     </form>
+//                 </div>
+//             </div>
+
+//             {editingUserId && (
+//                 <div className="card mb-4">
+//                     <div className="card-header">
+//                         <h2 className="mb-0">Modifier un Utilisateur</h2>
+//                     </div>
+//                     <div className="card-body">
+//                         <form onSubmit={handleUpdate} className="row g-3">
+//                             <div className="col-md-4">
+//                                 <label className="form-label">Prénom</label>
+//                                 <input
+//                                     type="text"
+//                                     name="firstName"
+//                                     className="form-control"
+//                                     value={formData.firstName}
+//                                     onChange={handleChange}
+//                                     required
+//                                 />
+//                             </div>
+//                             <div className="col-md-4">
+//                                 <label className="form-label">Nom</label>
+//                                 <input
+//                                     type="text"
+//                                     name="lastName"
+//                                     className="form-control"
+//                                     value={formData.lastName}
+//                                     onChange={handleChange}
+//                                     required
+//                                 />
+//                             </div>
+//                             <div className="col-md-4">
+//                                 <label className="form-label">Email</label>
+//                                 <input
+//                                     type="email"
+//                                     name="email"
+//                                     className="form-control"
+//                                     value={formData.email}
+//                                     onChange={handleChange}
+//                                     required
+//                                 />
+//                             </div>
+//                             <div className="col-md-4">
+//                                 <label className="form-label">Mot de Passe</label>
+//                                 <input
+//                                     type="password"
+//                                     name="password"
+//                                     className="form-control"
+//                                     value={formData.password}
+//                                     onChange={handleChange}
+//                                 />
+//                             </div>
+//                             <div className="col-md-4">
+//                                 <label className="form-label">Adresse</label>
+//                                 <input
+//                                     type="text"
+//                                     name="address"
+//                                     className="form-control"
+//                                     value={formData.address}
+//                                     onChange={handleChange}
+//                                     required
+//                                 />
+//                             </div>
+//                             <div className="col-md-4">
+//                                 <label className="form-label">Numéro de Téléphone</label>
+//                                 <input
+//                                     type="text"
+//                                     name="phoneNumber"
+//                                     className="form-control"
+//                                     value={formData.phoneNumber}
+//                                     onChange={handleChange}
+//                                 />
+//                             </div>
+//                             <div className="col-md-4 form-check">
+//                                 <input
+//                                     type="checkbox"
+//                                     name="isAdmin"
+//                                     className="form-check-input"
+//                                     checked={formData.isAdmin}
+//                                     onChange={handleChange}
+//                                 />
+//                                 <label className="form-check-label">Est Administrateur</label>
+//                             </div>
+//                             <div className="col-12">
+//                                 <button type="submit" className="btn btn-primary">Mettre à Jour</button>
+//                                 <button type="button" className="btn btn-secondary ms-2" onClick={() => setEditingUserId(null)}>Annuler</button>
+//                             </div>
+//                         </form>
+//                     </div>
+//                 </div>
+//             )}
+
+//             <div className="card">
+//                 <div className="card-header">
+//                     <h2>Liste des utilisateurs</h2>
+//                 </div>
+//                 <div className="card-body">
+//                     {error && <p className="text-danger">{error}</p>}
+//                     <div className="list-group">
+//                         {users.map(user => (
+//                             <div key={user.id} className="list-group-item">
+//                                 <div className="row">
+//                                     <div className="col-md-6">
+//                                         <p><strong>Prénom:</strong> {user.firstName}</p>
+//                                         <p><strong>Nom:</strong> {user.lastName}</p>
+//                                         <p><strong>Email:</strong> {user.email}</p>
+//                                     </div>
+//                                     <div className="col-md-6">
+//                                         <p><strong>Est Admin:</strong> {user.isAdmin ? 'Oui' : 'Non'}</p>
+//                                         <p><strong>Date de Création:</strong> {new Date(user.createdAt).toLocaleDateString()}</p>
+//                                     </div>
+//                                     <div className="col-md-12">
+//                                         <button onClick={() => toggleAdminStatus(user.id, user.isAdmin)} className="btn btn-warning me-2">
+//                                             {user.isAdmin ? 'Supprimer le statut Admin' : 'Activer le statut Admin'}
+//                                         </button>
+//                                         <button onClick={() => deleteUser(user.id)} className="btn btn-danger me-2">
+//                                             Supprimer
+//                                         </button>
+//                                         <button onClick={() => handleEditClick(user)} className="btn btn-secondary">
+//                                             Modifier
+//                                         </button>
+//                                     </div>
+//                                 </div>
+//                             </div>
+//                         ))}
+//                     </div>
+//                 </div>
+//             </div>
+//         </div>
+//     );
+// };
+
+// export default AdminDashboard;
 
 
 
