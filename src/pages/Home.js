@@ -1,3 +1,159 @@
+// Importation des bibliothèques et composants nécessaires
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux'; // Hooks Redux pour la gestion de l'état
+import axios from 'axios'; // Bibliothèque pour les requêtes HTTP
+import { useNavigate } from 'react-router-dom'; // Permet la navigation entre pages
+import { FETCH_SUCCESS, FETCH_FAILURE } from '../redux/reducers/sliceCar'; // Actions Redux
+import Footer from '../components/Footer'; // Composant pour le pied de page
+import { FaLeaf, FaRecycle } from 'react-icons/fa'; // Icônes utilisées pour la mise en page
+
+// Déclaration du composant Home
+const Home = () => {
+  const dispatch = useDispatch(); // Initialisation du hook pour envoyer des actions au store Redux
+  const cars = useSelector((state) => state.car.data); // Récupération des données des voitures depuis Redux
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated); // Vérifie si l'utilisateur est connecté
+  const isAdmin = useSelector((state) => state.auth.isAdmin); // Vérifie si l'utilisateur est un administrateur
+  const navigate = useNavigate(); // Hook pour la navigation programmatique
+
+  // Récupération des données des voitures depuis le backend
+  useEffect(() => {
+    const fetchCar = async () => {
+      try {
+        // Requête GET pour récupérer les données des voitures
+        const { data } = await axios.get(process.env.REACT_APP_BACKEND_URL + "/api/cars/all", {
+          withCredentials: true, // Inclut les cookies pour l'authentification
+        });
+        dispatch(FETCH_SUCCESS(data)); // Mise à jour des données des voitures en cas de succès
+      } catch (error) {
+        dispatch(FETCH_FAILURE(error.message)); // Envoie une action en cas d'échec
+      }
+    };
+    fetchCar(); // Appel de la fonction pour récupérer les voitures
+  }, [dispatch]); // Exécution au montage grâce à useEffect
+
+  // Fonction pour gérer la réservation d'une voiture
+  const handleReserveClick = (carId) => {
+    if (isAuthenticated) {
+      // Si l'utilisateur est connecté, redirige vers la page de paiement
+      navigate(`/payment/${carId}`);
+    } else {
+      // Sinon, affiche une alerte demandant de se connecter
+      alert("Veuillez vous connecter pour réserver une voiture.");
+    }
+  };
+
+  // Structure principale de la page
+  return (
+    <div className="container my-5"> {/* Conteneur principal */}
+      {/* Section de présentation */}
+      <div className="p-5 mb-4 bg-light rounded-3 shadow-sm">
+        <h1 className="display-4 fw-bold text-primary text-center">
+          Bienvenue chez AUTOECO
+        </h1>
+        <p className="lead text-center">
+          Le premier service de location de véhicules écologiques fonctionnant au bioéthanol et au GPL.
+        </p>
+      </div>
+
+      {/* Section philosophie et valeurs */}
+      <div className="row justify-content-center mb-5">
+        <div className="col-md-10">
+          {/* Carte philosophie */}
+          <div className="card mb-4 shadow-sm border-0">
+            <div className="card-body">
+              <h5 className="card-title">Notre philosophie</h5>
+              <p className="card-text">
+                AUTOECO croit en une mobilité respectueuse de l'environnement tout en restant accessible.
+              </p>
+            </div>
+          </div>
+
+          {/* Carte écologie */}
+          <div className="card mb-4 shadow-sm border-0 bg-light">
+            <div className="card-body">
+              <FaLeaf size={50} color="green" /> {/* Icône feuille */}
+              <h5 className="card-title mt-3">Économie et Écologie</h5>
+              <p className="card-text">
+                Nos véhicules roulent au bioéthanol et au GPL, réduisant ainsi les émissions de CO2.
+              </p>
+            </div>
+          </div>
+
+          {/* Carte véhicules reconditionnés */}
+          <div className="card mb-4 shadow-sm border-0">
+            <div className="card-body">
+              <FaRecycle size={50} color="green" /> {/* Icône recyclage */}
+              <h5 className="card-title mt-3">Véhicules reconditionnés</h5>
+              <p className="card-text">
+                Nos voitures proviennent de processus de reconditionnement, prolongeant leur cycle de vie.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Message d'inscription */}
+      <p className="text-primary text-center fw-bold fs-3">
+        Pour réserver un véhicule, rien de plus simple : inscrivez vous grace au bouton "Inscription" 
+        et connectez vous grace au bouton "Connexion".
+      </p>
+
+      {/* Liste des véhicules disponibles */}
+      <h2 className="text-center my-4">Véhicules disponibles</h2>
+      <div className="row">
+        {cars.length === 0 ? ( // Si aucune voiture n'est disponible
+          <p className="text-center fs-4">Aucune voiture disponible</p>
+        ) : (
+          cars.map((car, index) => ( // Parcours des voitures pour les afficher
+            <div key={index} className="col-md-4 mb-4">
+              <div className="card h-100 shadow-lg">
+                {/* Affiche l'image de la voiture ou une image par défaut */}
+                {car.CarImages && car.CarImages.length > 0 ? (
+                  <img
+                    src={process.env.REACT_APP_BACKEND_URL + `${car.CarImages[0].imageURL}`}
+                    className="card-img-top"
+                    alt={`${car.brand} ${car.model}`}
+                    style={{ width: '100%', height: '200px', objectFit: 'cover' }}
+                  />
+                ) : (
+                  <img
+                    src="/images/default.png"
+                    className="card-img-top"
+                    alt="Default"
+                    style={{ width: '100%', height: '200px', objectFit: 'cover' }}
+                  />
+                )}
+
+                {/* Informations sur la voiture */}
+                <div className="card-body text-center">
+                  <h5 className="card-title">{car.brand} {car.model}</h5>   
+                  <p className="card-text">Année: {car.years}</p>
+                  <p className="card-text">Prix par jour: {car.pricePerDay} €</p>
+                  {/* Affiche un bouton Réserver si l'utilisateur n'est pas admin et est connecté */}
+                  {!isAdmin && isAuthenticated && (
+                    <button
+                      className="btn btn-primary mt-3"
+                      onClick={() => handleReserveClick(car.id)}
+                    >
+                      Réserver
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+          ))
+        )}
+      </div>
+
+      {/* Pied de page */}
+      <Footer />
+    </div>
+  );
+};
+
+// Export du composant pour l'utiliser ailleurs
+export default Home;
+
 
 
 // import React, { useEffect } from 'react';
