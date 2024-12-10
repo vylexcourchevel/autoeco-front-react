@@ -94,7 +94,7 @@ const Payment = () => {
             <h5 className="card-title">{car.brand} {car.model}</h5>
             <p className="card-text">Année: {car.years}</p>
             <p className="card-text">Prix par jour: {car.pricePerDay} €</p>
-            <p className="card-text">Disponibilité: {car.available ? 'Oui' : 'Non'}</p>
+          
             <DatePicker
               selected={startDate}
               onChange={(date) => setStartDate(date)}

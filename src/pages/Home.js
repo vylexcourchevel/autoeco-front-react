@@ -125,8 +125,7 @@ const Home = () => {
 
                 {/* Informations sur la voiture */}
                 <div className="card-body text-center">
-                  <h5 className="card-title">{car.brand} {car.model}</h5>
-                  <p className="card-text">Plaque d'immatriculation: {car.registrationPlate}</p>
+                  <h5 className="card-title">{car.brand} {car.model}</h5>   
                   <p className="card-text">Année: {car.years}</p>
                   <p className="card-text">Prix par jour: {car.pricePerDay} €</p>
                   {/* Affiche un bouton Réserver si l'utilisateur n'est pas admin et est connecté */}
