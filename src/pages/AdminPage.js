@@ -1,7 +1,6 @@
 
 
 
-
 // //src/pages/AdminPage.js VERSION TEST 
 
 
@@ -260,7 +259,9 @@ const AdminPage = () => {
               />
             </div>
           </div>
-          <div className="form-group" style={{ flex: '1 1 12%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+
+
+          <div className="form-group" style={{ flex: '1 1 12%', display: 'flex', justifyContent: 'center', alignItems: 'center',marginLeft: '40px' }}>
             <button 
               type="submit" 
               className="btn btn-primary btn-lg"
