@@ -62,6 +62,10 @@ const Login = () => {
             if (response.status === 200) {
                 setMessage('Un email avec les instructions a été envoyé.');
                 setError('');
+                // Redirige vers la page d'accueil après un délai pour afficher le message
+                setTimeout(() => {
+                    navigate('/');
+                }, 3000);
             }
         } catch {
             setError('Une erreur s\'est produite, vérifiez votre email.');
@@ -173,6 +177,7 @@ const Login = () => {
 export default Login;
 
 
+
 // import React, { useState, useEffect } from 'react';
 // import { Container, Row, Col, Form, Button, Alert } from 'react-bootstrap';
 // import { useNavigate } from 'react-router-dom';
@@ -183,7 +188,7 @@ export default Login;
 // const Login = () => {
 //     const [formData, setFormData] = useState({
 //         email: '',
-//         password: ''
+//         password: '',
 //     });
 
 //     const [error, setError] = useState('');
@@ -194,62 +199,57 @@ export default Login;
 //     const navigate = useNavigate();
 //     const dispatch = useDispatch();
 
-//     // Gérer les changements dans le formulaire
+//     // Gestion des changements dans le formulaire
 //     const handleChange = (e) => {
 //         const { name, value } = e.target;
 //         setFormData({
 //             ...formData,
-//             [name]: value
+//             [name]: value,
 //         });
 //     };
 
-//     // Soumettre le formulaire pour se connecter
+//     // Soumission du formulaire pour la connexion
 //     const handleSubmit = async (e) => {
 //         e.preventDefault();
 //         try {
-//             const response = await axios.post(process.env.REACT_APP_BACKEND_URL+'/api/users/login', formData, {
-//                 withCredentials: true
+//             const response = await axios.post(process.env.REACT_APP_BACKEND_URL + '/api/users/login', formData, {
+//                 withCredentials: true,
 //             });
 
 //             if (response.status === 200 && response.data) {
-//                 // Mise à jour du store Redux
-//                 dispatch(loginSuccess(response.data));
+//                 dispatch(loginSuccess(response.data)); // Mise à jour du store Redux
+//                 setShowSuccessMessage(true); // Affiche le message de succès
 
-//                 // Affichage du message de succès
-//                 setShowSuccessMessage(true);
-
-//                 // Redirection basée sur le rôle de l'utilisateur
-//                 if (response.data.isAdmin) {
-//                     navigate('/admin');
-//                 } else {
-//                     navigate('/');
-//                 }
+//                 // Redirection selon le rôle utilisateur
+//                 navigate(response.data.isAdmin ? '/admin' : '/');
 //             }
 //         } catch (error) {
-//             if (error.response && error.response.data) {
-//                 setError(error.response.data.message || 'Email ou mot de passe incorrect');
-//             } else {
-//                 setError('Une erreur s\'est produite lors de la connexion');
-//             }
+//             setError(error.response?.data?.message || 'Email ou mot de passe incorrect');
 //             dispatch(loginFailure(error.message));
-//             console.error('Login error:', error);
+
+//             // Affiche l'erreur pendant 3 secondes et recharge la page
+//             setTimeout(() => {
+//                 setError('');
+//                 window.location.reload();
+//             }, 3000);
 //         }
 //     };
 
-//     // Soumettre la demande de réinitialisation de mot de passe
+//     // Réinitialisation de mot de passe
 //     const handleForgotPasswordSubmit = async (email) => {
 //         try {
-//             const response = await axios.post(process.env.REACT_APP_BACKEND_URL+'/api/users/forgot-password', { email });
+//             const response = await axios.post(process.env.REACT_APP_BACKEND_URL + '/api/users/forgot-password', { email });
 //             if (response.status === 200) {
-//                 setMessage('Un email avec les instructions de réinitialisation a été envoyé.');
+//                 setMessage('Un email avec les instructions a été envoyé.');
 //                 setError('');
 //             }
-//         } catch (err) {
+//         } catch {
 //             setError('Une erreur s\'est produite, vérifiez votre email.');
 //             setMessage('');
 //         }
 //     };
 
+//     // Composant pour la réinitialisation de mot de passe
 //     const ForgotPassword = () => {
 //         const [email, setEmail] = useState('');
 
@@ -285,15 +285,13 @@ export default Login;
 //         );
 //     };
 
-//     const containerStyle = {
-//         marginTop: '100px' // Décalage vers le bas de 100px
-//     };
+//     const containerStyle = { marginTop: '100px' };
 
-//     // Vérification de l'état de la connexion et redirection après succès
+//     // Redirection si l'utilisateur est déjà connecté
 //     useEffect(() => {
-//         const token = document.cookie.split(';').find(cookie => cookie.trim().startsWith('token='));
+//         const token = document.cookie.split(';').find((cookie) => cookie.trim().startsWith('token='));
 //         if (token) {
-//             navigate('/'); // Redirigez vers la page d'accueil si l'utilisateur est déjà connecté
+//             navigate('/'); // Redirige vers la page d'accueil
 //         }
 //     }, [navigate]);
 
@@ -307,11 +305,11 @@ export default Login;
 //                         </Alert>
 //                     )}
 //                     {isForgotPassword ? (
-//                         <ForgotPassword /> // Affiche la page de réinitialisation du mot de passe
+//                         <ForgotPassword /> // Affiche la page de réinitialisation de mot de passe
 //                     ) : (
 //                         <div>
 //                             <h3 className="text-center">Connexion</h3>
-//                             {error && <Alert variant="danger">{error}</Alert>}
+//                             {error && <Alert variant="danger" className="text-center">{error}</Alert>}
 //                             <Form onSubmit={handleSubmit}>
 //                                 <Form.Group controlId="formEmail">
 //                                     <Form.Label>Email</Form.Label>
@@ -353,3 +351,4 @@ export default Login;
 // };
 
 // export default Login;
+
